@@ -200,8 +200,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <button role="tab" data-tab="story" aria-selected="true"><span class="n">1</span>Story</button>
       <button role="tab" data-tab="plan" aria-selected="false"><span class="n">2</span>Plan</button>
       <button role="tab" data-tab="next" aria-selected="false"><span class="n">3</span>Next Steps</button>
-      <button role="tab" data-tab="retire" aria-selected="false"><span class="n">+</span>Retirement</button>
       <button role="tab" data-tab="summary" aria-selected="false"><span class="n">✓</span>My Framework</button>
+      <button role="tab" data-tab="retire" aria-selected="false"><span class="n">+</span>Bonus: Retirement</button>
     </nav>
 
     <!-- STORY -->
@@ -376,7 +376,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <div class="legend"><span><i id="lg1"></i>What you put in</span><span><i id="lg2"></i>Growth</span></div>
       </div>
       <p class="small muted">For education and illustration only. All figures are hypothetical, based only on what you enter, and don't reflect any specific investment. Actual results will vary. This doesn't account for inflation, taxes, fees, or Social Security.</p>
-      <div class="navrow"><button class="btn secondary" data-go="next">← Next Steps</button><button class="btn primary" data-go="summary">See my framework →</button></div>
+      <div class="navrow"><button class="btn secondary" data-go="summary">← My Framework</button></div>
     </section>
 
     <!-- SUMMARY -->
@@ -390,6 +390,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <div class="navrow noprint">
         <button class="btn secondary" id="printBtn">Print or save as PDF</button>
         <button class="btn quiet" id="resetBtn">Start over</button>
+      </div>
+      <div class="card mt noprint" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+        <div><div class="label">Bonus tool</div><h3 style="margin-top:4px">See how your retirement savings could grow</h3><p class="small muted" style="margin:0">You can pull in your numbers from the Plan tab with one click.</p></div>
+        <button class="btn primary" data-go="retire">Open the retirement calculator →</button>
       </div>
       <div class="forest mt noprint">
         <div class="label">Want help with yours?</div>
