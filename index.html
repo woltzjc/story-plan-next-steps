@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Story, Plan, Next Steps</title>
+<meta name="description" content="A free, step-by-step tool from Pastor Turned Planner to stop feeling behind and start feeling ahead.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#2F3B33; --night:#0E1611; --cream:#F5F0E6; --sage:#E4EADF; --gold:#E8C98A; --gold-ink:#7A5A1E;
+  --bg:#F5F0E6; --surface:#FBF8F1; --surface-soft:#E4EADF; --ink:#1F2A23; --ink-muted:#56625A; --line:#D9D2C3;
+  --primary:#2F3B33; --primary-hover:#243029; --on-primary:#F5F0E6; --accent:#E8C98A; --accent-ink:#7A5A1E; --focus:#7A5A1E;
+  --success:#2F6B45; --success-soft:#E1EDE3; --warning:#8A5A00; --warning-soft:#F5E8CC; --danger:#A13D30;
+  --shadow-1:0 1px 2px rgba(18,25,20,.06),0 1px 1px rgba(18,25,20,.04);
+  --sans:'Figtree','Avenir Next','Segoe UI',system-ui,sans-serif;
+  --serif:'Instrument Serif','Iowan Old Style',Georgia,serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#121914; --surface:#1A231D; --surface-soft:#232E27; --ink:#F0EBE0; --ink-muted:#A7B2A9; --line:#334039;
+    --primary:#E8C98A; --primary-hover:#F0D7A3; --on-primary:#1A221C; --accent-ink:#E8C98A; --focus:#E8C98A;
+    --success:#8CC5A0; --success-soft:#1F3327; --warning:#F0B866; --warning-soft:#3A2E17; --danger:#EE9A8C;
+    --shadow-1:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/26px var(--sans);}
+em.s{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.08em;color:var(--accent-ink);letter-spacing:0}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+header.top{padding:20px 0 0}
+.mark{font-weight:600;font-size:18px;letter-spacing:-.005em}
+.mark em{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.12em;color:var(--accent-ink)}
+.hero{padding:32px 0 8px}
+.label{font-size:12px;line-height:16px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted)}
+h1{font-size:44px;line-height:48px;font-weight:600;letter-spacing:-.015em;margin:8px 0 12px}
+h2{font-size:30px;line-height:36px;font-weight:600;letter-spacing:-.01em;margin:4px 0 8px}
+h3{font-size:20px;line-height:28px;font-weight:600;margin:0 0 4px}
+p{margin:0 0 12px}
+.lead{font-size:18px;line-height:28px;color:var(--ink-muted);max-width:680px}
+.rule{width:48px;height:3px;border-radius:3px;background:var(--accent);margin:12px 0 16px}
+.muted{color:var(--ink-muted)}
+.small{font-size:14px;line-height:20px}
+
+/* tabs */
+nav.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin:24px 0 0;scrollbar-width:none;position:sticky;top:0;background:var(--bg);z-index:5}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{flex:0 0 auto;min-height:48px;padding:0 14px;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-muted);font:600 15px var(--sans);cursor:pointer}
+nav.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button .n{display:inline-block;width:22px;height:22px;line-height:22px;border-radius:999px;background:var(--surface-soft);color:var(--ink);font-size:12px;margin-right:6px;text-align:center}
+section.panel{display:none;padding:28px 0 40px}
+section.panel.on{display:block;animation:in .36s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){section.panel.on{animation:none}}
+
+/* cards & forms */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:var(--shadow-1);margin:0 0 16px}
+.card .step{display:flex;gap:12px;align-items:flex-start}
+.badge{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:var(--forest);color:var(--cream);font-weight:700;font-size:14px;display:grid;place-items:center;margin-top:1px}
+.forest{background:var(--forest);color:var(--cream);border-radius:12px;padding:24px;margin:0 0 16px}
+.forest .label{color:var(--sage)}
+.forest em.s{color:var(--gold)}
+.forest .rule{background:var(--gold)}
+label.f{display:block;font-size:14px;line-height:20px;font-weight:600;margin:0 0 6px}
+label.f.mt{margin-top:16px}
+.help{font-size:13px;line-height:18px;color:var(--ink-muted);margin-top:6px}
+input[type=text],input[type=email],select,textarea{width:100%;min-height:44px;padding:10px 12px;font:16px var(--sans);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;transition:border-color .14s,box-shadow .14s}
+textarea{min-height:64px;resize:vertical;line-height:24px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px rgba(232,201,138,.45)}
+.money{position:relative}
+.money::before{content:'$';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-muted);pointer-events:none}
+.money input{padding-left:24px}
+.pct{position:relative}
+.pct::after{content:'%';position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--ink-muted);pointer-events:none}
+.pct input{padding-right:28px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mt{margin-top:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;font:600 15px/20px var(--sans);cursor:pointer;border:1px solid transparent;text-decoration:none;transition:background .14s,border-color .14s}
+.btn.primary{background:var(--primary);color:var(--on-primary)}
+.btn.primary:hover{background:var(--primary-hover)}
+.btn.secondary{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn.secondary:hover{background:var(--surface-soft)}
+.btn.quiet{background:none;color:var(--accent-ink);text-decoration:underline;padding:0 4px}
+.btn.gold{background:var(--gold);color:#1A221C}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.navrow{display:flex;justify-content:space-between;gap:12px;margin-top:24px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{min-height:32px;padding:0 12px;border-radius:999px;background:var(--surface-soft);border:1px solid transparent;color:var(--ink);font:600 13px var(--sans);cursor:pointer}
+.chip:hover{border-color:var(--line)}
+
+/* list rows */
+.rows .row{display:grid;gap:8px;align-items:center;margin-bottom:8px}
+.rows .hdr{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:4px}
+.x{width:36px;height:36px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink-muted);font-size:18px;cursor:pointer}
+.x:hover{color:var(--danger);border-color:var(--danger)}
+.cols-acct{grid-template-columns:1.6fr 1fr 1fr 36px}
+.cols-debt{grid-template-columns:1.4fr 1fr .7fr 1fr 36px}
+.cols-exp{grid-template-columns:1.6fr 1fr 36px}
+.cols-use{grid-template-columns:1.6fr 1fr 36px}
+@media (max-width:620px){
+  h1{font-size:34px;line-height:38px}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .cols-acct{grid-template-columns:1fr 1fr 36px}.cols-acct>:first-child{grid-column:1/-1}
+  .cols-debt{grid-template-columns:1fr .7fr 1fr 36px}.cols-debt>:first-child{grid-column:1/-1}
+  .rows .hdr{display:none}
+}
+
+/* stats */
+.stat{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.stat:first-child{border-top:0}
+.stat b{font-size:20px;font-variant-numeric:tabular-nums;font-weight:600}
+.big{font-size:40px;line-height:44px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.pill{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:4px;font-size:13px;font-weight:600}
+.pill::before{content:'';width:6px;height:6px;border-radius:99px;background:currentColor}
+.pill.ok{background:var(--success-soft);color:var(--success)}
+.pill.warn{background:var(--warning-soft);color:var(--warning)}
+.order{margin:10px 0 0;padding-left:20px}
+
+/* next steps */
+.ns{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start}
+.ns .meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.ns .meta select{width:auto;min-width:180px}
+.check{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:14px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--forest)}
+.donebox{margin-top:10px;padding:12px;border-radius:8px;background:var(--success-soft);color:var(--success);font-weight:600;font-size:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+
+/* chart */
+canvas{width:100%;height:220px;display:block}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--ink-muted);margin-top:6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+/* summary / framework */
+.fw{display:flex;flex-direction:column;align-items:stretch}
+.fwbox{border:2px solid var(--forest);border-radius:12px;background:var(--surface);overflow:hidden}
+.fwbox .t{background:var(--forest);color:var(--cream);padding:10px 20px;font-weight:700;letter-spacing:.14em;font-size:14px}
+.fwbox .b{padding:16px 20px}
+.fwbox ol,.fwbox ul{margin:4px 0 12px;padding-left:22px}
+.fwbox .sub{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-muted);margin-top:4px}
+.conn{width:2px;height:36px;background:var(--forest);margin:0 auto;position:relative}
+.conn::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);border:7px solid transparent;border-top-color:var(--forest);border-bottom:0}
+@media (prefers-color-scheme:dark){.fwbox{border-color:var(--line)}.conn{background:var(--line)}.conn::after{border-top-color:var(--line)}}
+.empty{color:var(--ink-muted);font-style:italic}
+
+/* gate */
+#gate{display:none}
+body.locked #gate{display:block}
+body.locked #app{display:none}
+.gatecard{max-width:520px}
+.err{color:var(--danger);font-size:14px;margin-top:8px;min-height:20px}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-height:20px;color:var(--ink-muted)}
+
+@media print{
+  body{background:#fff;color:#000}
+  header.top,.hero,nav.tabs,section.panel,footer,.noprint{display:none!important}
+  section#p-summary{display:block!important;padding:0}
+  .fwbox{break-inside:avoid;border-color:#2F3B33;background:#fff}
+  .fwbox .t{background:#2F3B33!important;color:#F5F0E6!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .conn{background:#2F3B33}.conn::after{border-top-color:#2F3B33}
+  .printhead{display:block!important}
+}
+.printhead{display:none;margin-bottom:16px}
+</style>
+</head>
+<body class="locked">
+<div class="wrap">
+  <header class="top"><div class="mark">Pastor turned <em>Planner</em></div></header>
+
+  <!-- ============ EMAIL GATE ============ -->
+  <section id="gate" class="hero">
+    <div class="label">Free tool</div>
+    <h1>Stop feeling behind. Start feeling <em class="s">ahead.</em></h1>
+    <p class="lead">A simple, step-by-step way to build your own STORY, PLAN, and NEXT STEPS. It takes about 30 minutes. Grab a coffee.</p>
+    <div class="card gatecard mt">
+      <form id="gateForm" novalidate>
+        <label class="f" for="gName">First name</label>
+        <input type="text" id="gName" autocomplete="given-name">
+        <label class="f mt" for="gEmail">Email</label>
+        <input type="email" id="gEmail" autocomplete="email" required>
+        <div class="err" id="gErr" role="alert"></div>
+        <button class="btn primary" type="submit" id="gBtn">Start my plan</button>
+        <p class="help mt">You'll also get my newsletter. Unsubscribe anytime. The numbers you enter stay on this device. They're never sent to me or anyone else.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ APP ============ -->
+  <div id="app">
+    <div class="hero noprint">
+      <div class="label" id="hello">Your plan</div>
+      <h1>Your STORY decides your PLAN. Your PLAN tells you your <em class="s">next step.</em></h1>
+      <p class="lead">Work through each tab in order. Everything saves on this device automatically, so you can come back anytime.</p>
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="story" aria-selected="true"><span class="n">1</span>Story</button>
+      <button role="tab" data-tab="plan" aria-selected="false"><span class="n">2</span>Plan</button>
+      <button role="tab" data-tab="next" aria-selected="false"><span class="n">3</span>Next Steps</button>
+      <button role="tab" data-tab="retire" aria-selected="false"><span class="n">+</span>Retirement</button>
+      <button role="tab" data-tab="summary" aria-selected="false"><span class="n">✓</span>My Framework</button>
+    </nav>
+
+    <!-- STORY -->
+    <section class="panel on" id="p-story" role="tabpanel">
+      <div class="label">Part 1</div>
+      <h2>Everything starts with your <em class="s">story.</em></h2>
+      <p class="lead">What is the story you want your life to tell? This should guide every money decision you make from here.</p>
+      <div class="rule"></div>
+
+      <div class="card">
+        <div class="step"><div class="badge">1</div><div style="flex:1">
+          <h3>Name three themes</h3>
+          <p class="muted small">The three things you want to define the story of your life. Tap an idea or write your own.</p>
+          <div class="grid3">
+            <input type="text" data-p="story.themes.0" placeholder="Theme 1" aria-label="Theme 1">
+            <input type="text" data-p="story.themes.1" placeholder="Theme 2" aria-label="Theme 2">
+            <input type="text" data-p="story.themes.2" placeholder="Theme 3" aria-label="Theme 3">
+          </div>
+          <div class="chips" id="themeIdeas"></div>
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="step"><div class="badge">2</div><div style="flex:1">
+          <h3>What's standing in the way?</h3>
+          <p class="muted small">List the barriers. You can't plan around a problem you haven't named.</p>
+          <div class="grid3">
+            <input type="text" data-p="story.barriers.0" placeholder="Barrier 1" aria-label="Barrier 1">
+            <input type="text" data-p="story.barriers.1" placeholder="Barrier 2" aria-label="Barrier 2">
+            <input type="text" data-p="story.barriers.2" placeholder="Barrier 3" aria-label="Barrier 3">
+          </div>
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="step"><div class="badge">3</div><div style="flex:1">
+          <h3>Where is your story headed? <span class="muted small" style="font-weight:400">(optional)</span></h3>
+          <div class="grid2">
+            <div><label class="f" for="sFrom">My story moves from…</label><input type="text" id="sFrom" data-p="story.from" placeholder="“Not gonna happen”"></div>
+            <div><label class="f" for="sTo">…to</label><input type="text" id="sTo" data-p="story.to" placeholder="“I'm gonna make it happen!”"></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="navrow"><span></span><button class="btn primary" data-go="plan">Next: build your plan →</button></div>
+    </section>
+
+    <!-- PLAN -->
+    <section class="panel" id="p-plan" role="tabpanel">
+      <div class="label">Part 2</div>
+      <h2>Your story decides your <em class="s">plan.</em></h2>
+      <p class="lead">Eight simple steps. Rough numbers are fine. You can always come back and fine-tune them.</p>
+      <div class="rule"></div>
+
+      <div class="card"><div class="step"><div class="badge">1</div><div style="flex:1">
+        <h3>Gross income and retirement contributions</h3>
+        <div class="grid2 mt">
+          <div><label class="f" for="pGross">Gross income (per year)</label><div class="money"><input type="text" inputmode="decimal" id="pGross" data-p="plan.gross"></div><div class="help">Before taxes. Include your spouse's if you share finances.</div></div>
+          <div><label class="f" for="pRet">Retirement contributions (per year)</label><div class="money"><input type="text" inputmode="decimal" id="pRet" data-p="plan.retire"></div><div class="help">What you put into 401(k)s, IRAs, etc. Include an employer match if you have one.</div></div>
+        </div>
+        <p class="mt small" id="o-rate"></p>
+      </div></div></div>
+
+      <div class="card"><div class="step"><div class="badge">2</div><div style="flex:1">
+        <h3>Investment and emergency fund balances</h3>
+        <p class="muted small">What you have, and what you add each month.</p>
+        <div class="rows" data-list="plan.accounts"></div>
+        <button class="btn quiet" data-add="plan.accounts">+ Add an account</button>
+        <p class="small mt" id="o-accts"></p>
+      </div></div></div>
+
+      <div class="card"><div class="step"><div class="badge">3</div><div style="flex:1">
+        <h3>Debts and interest rates</h3>
+        <div class="rows" data-list="plan.debts"></div>
+        <button class="btn quiet" data-add="plan.debts">+ Add a debt</button>
+        <div class="small mt" id="o-debts"></div>
+      </div></div></div>
+
+      <div class="card"><div class="step"><div class="badge">4</div><div style="flex:1">
+        <h3>Take-home pay</h3>
+        <label class="f" for="pTake">What actually lands in your bank account each month</label>
+        <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pTake" data-p="plan.takeHome"></div>
+        <div class="help">After taxes and paycheck deductions.</div>
+      </div></div></div>
+
+      <div class="card"><div class="step"><div class="badge">5</div><div style="flex:1">
+        <h3>Monthly expenses</h3>
+        <p class="muted small">Look at the last few months of bank and card statements. Most people guess low.</p>
+        <div class="rows" data-list="plan.expenses"></div>
+        <button class="btn quiet" data-add="plan.expenses">+ Add an expense</button>
+        <div class="mt" id="o-exp"></div>
+      </div></div></div>
+
+      <div class="card"><div class="step"><div class="badge">6</div><div style="flex:1">
+        <h3>A little extra margin for the unexpected</h3>
+        <p class="muted small">Life happens. Set aside a cushion each month so a surprise doesn't derail the plan.</p>
+        <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pMargin" data-p="plan.margin" aria-label="Monthly margin"></div>
+        <div class="chips" id="marginChips"></div>
+      </div></div></div>
+
+      <div class="forest"><div class="step"><div class="badge" style="background:var(--gold);color:#1A221C">7</div><div style="flex:1">
+        <div class="label">What's left each month</div>
+        <div class="big" id="o-left">$0</div>
+        <div class="small" style="color:var(--sage)" id="o-leftmath"></div>
+      </div></div></div>
+
+      <div class="card"><div class="step"><div class="badge">8</div><div style="flex:1">
+        <h3>Use your story to decide how to <em class="s">use</em> it</h3>
+        <p class="muted small">Not spend. <b>Use.</b> Give every dollar a job that points back to your three themes.</p>
+        <div class="rows" data-list="plan.uses"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn quiet" data-add="plan.uses">+ Add a use</button>
+          <button class="btn quiet" id="seedUses">+ Add my story themes</button>
+        </div>
+        <div class="mt" id="o-uses"></div>
+      </div></div></div>
+
+      <p class="small muted">Helpful tools: a budgeting app (Jeremy uses YNAB, but use whatever works for you) and the Retirement tab in this tool.</p>
+      <div class="navrow"><button class="btn secondary" data-go="story">← Story</button><button class="btn primary" data-go="next">Next: pick your next steps →</button></div>
+    </section>
+
+    <!-- NEXT STEPS -->
+    <section class="panel" id="p-next" role="tabpanel">
+      <div class="label">Part 3</div>
+      <h2>Your plan tells you your <em class="s">next step.</em></h2>
+      <p class="lead">Overwhelm is real. Don't try to change everything at once. Pick just one to three clear next steps.</p>
+      <div class="rule"></div>
+      <div class="card">
+        <h3>Ideas to get you started</h3>
+        <p class="muted small">Tap one to add it, then make it yours. Your steps will look different from anyone else's, based on your story and your plan.</p>
+        <div class="chips" id="stepIdeas"></div>
+      </div>
+      <div id="nsList"></div>
+      <div class="card" id="doneCard" hidden>
+        <h3>Done so far</h3>
+        <ul id="doneList" class="order"></ul>
+      </div>
+      <p class="small muted">Make each one simple, attainable, and clear. When one is done, replace it with a new next step based on your story and your plan.</p>
+      <div class="navrow"><button class="btn secondary" data-go="plan">← Plan</button><button class="btn primary" data-go="summary">See my framework →</button></div>
+    </section>
+
+    <!-- RETIREMENT -->
+    <section class="panel" id="p-retire" role="tabpanel">
+      <div class="label">Bonus tool</div>
+      <h2>Retirement <em class="s">calculator</em></h2>
+      <p class="lead">See how your savings could grow between now and retirement. This is a starting point for a conversation, not a financial plan.</p>
+      <div class="rule"></div>
+      <div class="card">
+        <div class="grid3">
+          <div><label class="f" for="rAge">Current age</label><input type="text" inputmode="numeric" id="rAge" data-p="ret.age"></div>
+          <div><label class="f" for="rRetAge">Retirement age</label><input type="text" inputmode="numeric" id="rRetAge" data-p="ret.retireAge"></div>
+          <div><label class="f" for="rSav">Current retirement savings</label><div class="money"><input type="text" inputmode="decimal" id="rSav" data-p="ret.savings"></div></div>
+          <div><label class="f" for="rMon">Monthly contributions</label><div class="money"><input type="text" inputmode="decimal" id="rMon" data-p="ret.monthly"></div></div>
+          <div><label class="f" for="rRate">Return rate</label><div class="pct"><input type="text" inputmode="decimal" id="rRate" data-p="ret.rate"></div></div>
+          <div><label class="f" for="rInc">Yearly contribution increase</label><div class="pct"><input type="text" inputmode="decimal" id="rInc" data-p="ret.inc"></div></div>
+          <div><label class="f" for="rWd">Withdrawal rate in retirement</label><div class="pct"><input type="text" inputmode="decimal" id="rWd" data-p="ret.wd"></div></div>
+        </div>
+        <div class="help">The return rate is a hypothetical assumption, not a promised return. Try a few different numbers to see a range.</div>
+        <button class="btn quiet mt" id="pullPlan">Use my numbers from the Plan tab</button>
+      </div>
+      <div class="forest">
+        <div class="label" id="r-pre">In 0 years, you could have</div>
+        <div class="big" id="r-final" style="color:var(--gold)">$0</div>
+        <div class="grid3 mt">
+          <div><div class="small" style="color:var(--sage)">What you put in</div><b id="r-in">$0</b></div>
+          <div><div class="small" style="color:var(--sage)">Growth</div><b id="r-grow">$0</b></div>
+          <div><div class="small" style="color:var(--sage)">Est. monthly income in retirement</div><b id="r-inc">$0</b></div>
+        </div>
+      </div>
+      <div class="card">
+        <canvas id="chart" aria-label="Projected balance by age" role="img"></canvas>
+        <div class="legend"><span><i id="lg1"></i>What you put in</span><span><i id="lg2"></i>Growth</span></div>
+      </div>
+      <p class="small muted">For education and illustration only. All figures are hypothetical, based only on what you enter, and don't reflect any specific investment. Actual results will vary. This doesn't account for inflation, taxes, fees, or Social Security.</p>
+      <div class="navrow"><button class="btn secondary" data-go="next">← Next Steps</button><button class="btn primary" data-go="summary">See my framework →</button></div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="panel" id="p-summary" role="tabpanel">
+      <div class="printhead"><div class="mark">Pastor turned <em>Planner</em></div></div>
+      <div class="label noprint">Your one-page framework</div>
+      <h2>Here's what <em class="s">yours</em> looks like.</h2>
+      <p class="lead noprint">Print it, save it as a PDF, or stick it on the fridge. Come back and update it when life changes.</p>
+      <div class="rule"></div>
+      <div class="fw" id="fw"></div>
+      <div class="navrow noprint">
+        <button class="btn secondary" id="printBtn">Print or save as PDF</button>
+        <button class="btn quiet" id="resetBtn">Start over</button>
+      </div>
+      <div class="forest mt noprint">
+        <div class="label">Want help with yours?</div>
+        <h2 style="color:var(--cream)">Let's build it <em class="s">together.</em></h2>
+        <p style="color:var(--sage)">DM me the word <b style="color:var(--cream)">PLAN</b> on Instagram and we'll set up a free 30-minute call.</p>
+        <a class="btn gold" id="igLink" href="#" target="_blank" rel="noopener">DM “PLAN” on Instagram</a>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Pastor Turned Planner · Jeremy Woltz. This tool is for education only and isn't individual financial, tax, or legal advice.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ====== SETTINGS: fill these in ====== */
+var KIT_FORM_ID = '10186716';    // Kit form "Story Plan Next Steps Tool". Empty = test mode (no email is sent).
+var INSTAGRAM_URL = 'https://ig.me/m/pastor_turned_planner'; // opens a DM; profile: https://www.instagram.com/pastor_turned_planner/
+/* ===================================== */
+
+var KEY = 'ptp-spn-v1';
+var DEFAULT = {
+  unlocked:false, name:'',
+  story:{themes:['','',''], barriers:['','',''], from:'', to:''},
+  plan:{gross:'', retire:'',
+    accounts:[{name:'Emergency fund',bal:'',add:''},{name:'Retirement accounts',bal:'',add:''},{name:'Brokerage / other investments',bal:'',add:''}],
+    debts:[{name:'',bal:'',rate:'',min:''}],
+    takeHome:'',
+    expenses:[{name:'Housing',amt:''},{name:'Utilities',amt:''},{name:'Groceries',amt:''},{name:'Transportation',amt:''},{name:'Insurance',amt:''},{name:'Kids / childcare',amt:''},{name:'Subscriptions',amt:''},{name:'Everything else',amt:''}],
+    margin:'', uses:[]},
+  next:[{text:'',theme:'',done:false},{text:'',theme:'',done:false},{text:'',theme:'',done:false}],
+  done:[],
+  ret:{age:'38', retireAge:'65', savings:'50000', monthly:'750', rate:'6', inc:'0', wd:'4'},
+  tab:'story'
+};
+var LISTS = {
+  'plan.accounts':{cls:'cols-acct', blank:{name:'',bal:'',add:''}, cols:[['name','Account','text'],['bal','Balance','money'],['add','Monthly','money']]},
+  'plan.debts':{cls:'cols-debt', blank:{name:'',bal:'',rate:'',min:''}, cols:[['name','Debt','text'],['bal','Balance','money'],['rate','Rate','pct'],['min','Min. payment / mo','money']]},
+  'plan.expenses':{cls:'cols-exp', blank:{name:'',amt:''}, cols:[['name','Expense','text'],['amt','Per month','money']]},
+  'plan.uses':{cls:'cols-use', blank:{name:'',amt:''}, cols:[['name','Use','text'],['amt','Per month','money']]}
+};
+var THEME_IDEAS = ['Memories','Experiences','Generosity','Family','Faith','Freedom','Adventure','Health','Rest','Security','Legacy','Community','Travel','Margin'];
+var STEP_IDEAS = ['Start a budget','Trim expenses or raise income','Pay off debt, highest interest rate first','Build a 3–6 month emergency fund','Open a brokerage account','Invest a set amount from every paycheck'];
+
+var S = load();
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function load(){
+  var s=null; try{ s=JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  var d=clone(DEFAULT); if(!s) return d;
+  for(var k in d){ if(s[k]===undefined) s[k]=d[k]; }
+  ['story','plan','ret'].forEach(function(k){ for(var j in d[k]) if(s[k][j]===undefined) s[k][j]=d[k][j]; });
+  return s;
+}
+var saveT; function save(){ clearTimeout(saveT); saveT=setTimeout(function(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} },150); }
+function $(id){return document.getElementById(id);}
+function num(v){var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n;}
+function fmt(n){return (n<0?'−':'')+'$'+Math.round(Math.abs(n)).toLocaleString('en-US');}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function getP(p){return p.split('.').reduce(function(o,k){return o==null?o:o[k];},S);}
+function setP(p,v){var ks=p.split('.'),o=S;for(var i=0;i<ks.length-1;i++)o=o[ks[i]];o[ks[ks.length-1]]=v;}
+function sum(a,k){return a.reduce(function(t,r){return t+num(r[k]);},0);}
+
+/* ---------- gate ---------- */
+function unlock(){ document.body.classList.remove('locked'); if(S.name) $('hello').textContent=S.name+'’s plan'; }
+if(S.unlocked) unlock();
+$('gateForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var email=$('gEmail').value.trim(), name=$('gName').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $('gErr').textContent='Please enter a valid email address.'; $('gEmail').focus(); return; }
+  $('gErr').textContent=''; $('gBtn').disabled=true; $('gBtn').textContent='One moment…';
+  var done=function(){ S.unlocked=true; S.name=name; save(); unlock(); window.scrollTo(0,0); };
+  if(!KIT_FORM_ID){ done(); return; }
+  var fd=new FormData(); fd.append('email_address',email); if(name) fd.append('fields[first_name]',name);
+  fetch('https://app.kit.com/forms/'+encodeURIComponent(KIT_FORM_ID)+'/subscriptions',{method:'POST',body:fd,mode:'no-cors'})
+    .then(done).catch(function(){ $('gErr').textContent='Something went wrong. Please check your connection and try again.'; $('gBtn').disabled=false; $('gBtn').textContent='Start my plan'; });
+});
+
+/* ---------- tabs ---------- */
+function go(t){
+  document.querySelectorAll('nav.tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.tab===t);});
+  document.querySelectorAll('section.panel').forEach(function(p){p.classList.toggle('on',p.id==='p-'+t);});
+  S.tab=t; save();
+  if(t==='next') renderNext();
+  if(t==='retire') calcRet();
+  if(t==='summary') renderSummary();
+}
+document.querySelectorAll('nav.tabs button').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.tab);});});
+document.addEventListener('click',function(e){
+  var g=e.target.closest('[data-go]'); if(g){ go(g.dataset.go); window.scrollTo({top:document.querySelector('nav.tabs').offsetTop-4}); }
+});
+
+/* ---------- generic inputs ---------- */
+function fill(root){ (root||document).querySelectorAll('[data-p]').forEach(function(el){ var v=getP(el.dataset.p); el.value=v==null?'':v; }); }
+document.addEventListener('input',function(e){
+  var el=e.target; if(!el.dataset||!el.dataset.p) return;
+  setP(el.dataset.p, el.value); save(); recalc();
+  if(el.dataset.p.indexOf('ret.')===0) calcRet();
+  if(el.dataset.p.indexOf('story.themes')===0) themeSelects();
+});
+
+/* ---------- lists ---------- */
+function renderList(path){
+  var cfg=LISTS[path], box=document.querySelector('[data-list="'+path+'"]'), rows=getP(path);
+  var h='<div class="row hdr '+cfg.cls+'">'+cfg.cols.map(function(c){return '<div>'+c[1]+'</div>';}).join('')+'<div></div></div>';
+  rows.forEach(function(r,i){
+    h+='<div class="row '+cfg.cls+'">'+cfg.cols.map(function(c){
+      var inp='<input type="text" '+(c[2]!=='text'?'inputmode="decimal" ':'')+'data-p="'+path+'.'+i+'.'+c[0]+'" placeholder="'+c[1]+'" aria-label="'+c[1]+' '+(i+1)+'">';
+      return c[2]==='money'?'<div class="money">'+inp+'</div>':c[2]==='pct'?'<div class="pct">'+inp+'</div>':inp;
+    }).join('')+'<button class="x" data-del="'+path+'" data-i="'+i+'" aria-label="Remove row">×</button></div>';
+  });
+  box.innerHTML=h; fill(box);
+}
+document.addEventListener('click',function(e){
+  var a=e.target.closest('[data-add]');
+  if(a){ var p=a.dataset.add; getP(p).push(clone(LISTS[p].blank)); renderList(p); save(); recalc();
+    var ins=document.querySelectorAll('[data-list="'+p+'"] input'); if(ins.length) ins[ins.length-LISTS[p].cols.length].focus(); }
+  var d=e.target.closest('[data-del]');
+  if(d){ var q=d.dataset.del; getP(q).splice(+d.dataset.i,1); renderList(q); save(); recalc(); }
+});
+Object.keys(LISTS).forEach(renderList);
+
+/* ---------- chips ---------- */
+$('themeIdeas').innerHTML=THEME_IDEAS.map(function(t){return '<button class="chip" data-theme="'+t+'">'+t+'</button>';}).join('');
+$('themeIdeas').addEventListener('click',function(e){
+  var c=e.target.closest('[data-theme]'); if(!c) return;
+  var i=S.story.themes.findIndex(function(t){return !t.trim();}); if(i<0) i=2;
+  S.story.themes[i]=c.dataset.theme; fill($('p-story')); save(); themeSelects();
+});
+function marginChips(){
+  var exp=expTotal();
+  $('marginChips').innerHTML=[5,10].map(function(p){return '<button class="chip" data-m="'+Math.round(exp*p/100)+'">'+p+'% of expenses ('+fmt(exp*p/100)+')</button>';}).join('');
+}
+$('marginChips').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;S.plan.margin=c.dataset.m;$('pMargin').value=c.dataset.m;save();recalc();});
+$('seedUses').addEventListener('click',function(){
+  S.story.themes.filter(function(t){return t.trim();}).forEach(function(t){
+    if(!S.plan.uses.some(function(u){return u.name===t;})) S.plan.uses.push({name:t,amt:''});
+  });
+  if(!S.plan.uses.length) S.plan.uses.push({name:'',amt:''});
+  renderList('plan.uses'); save(); recalc();
+});
+
+/* ---------- plan math ---------- */
+function debtMin(){return sum(S.plan.debts,'min');}
+function expTotal(){return sum(S.plan.expenses,'amt')+debtMin();}
+function leftover(){return num(S.plan.takeHome)-expTotal()-num(S.plan.margin);}
+function recalc(){
+  var g=num(S.plan.gross), r=num(S.plan.retire);
+  $('o-rate').innerHTML = g>0 ? 'You\'re putting <b>'+(r/g*100).toFixed(1)+'%</b> of your gross income toward retirement.' : '';
+  var a=S.plan.accounts;
+  $('o-accts').innerHTML = a.length ? 'Total: <b>'+fmt(sum(a,'bal'))+'</b> saved, <b>'+fmt(sum(a,'add'))+'</b> added each month.' : '';
+  var ds=S.plan.debts.filter(function(d){return d.name.trim()||num(d.bal);});
+  if(ds.length){
+    var sorted=ds.slice().sort(function(x,y){return num(y.rate)-num(x.rate);});
+    $('o-debts').innerHTML='Total owed: <b>'+fmt(sum(ds,'bal'))+'</b>. Highest rate first:<ol class="order">'+sorted.map(function(d){return '<li>'+esc(d.name||'Debt')+' — '+num(d.rate)+'% ('+fmt(num(d.bal))+')</li>';}).join('')+'</ol>';
+  } else $('o-debts').innerHTML='';
+  var dm=debtMin(), et=expTotal(), th=num(S.plan.takeHome);
+  $('o-exp').innerHTML='<div class="stat"><span>Expenses above</span><b>'+fmt(sum(S.plan.expenses,'amt'))+'</b></div>'+
+    '<div class="stat"><span>Debt minimum payments (from step 3)</span><b>'+fmt(dm)+'</b></div>'+
+    '<div class="stat"><span>Total monthly expenses</span><b>'+fmt(et)+'</b></div>'+
+    '<div class="stat"><span>Take-home minus expenses</span><b>'+fmt(th-et)+'</b></div>';
+  marginChips();
+  var L=leftover();
+  $('o-left').textContent=fmt(L);
+  $('o-leftmath').textContent=fmt(th)+' take-home − '+fmt(et)+' expenses − '+fmt(num(S.plan.margin))+' margin';
+  var u=sum(S.plan.uses,'amt'), rem=L-u;
+  $('o-uses').innerHTML = S.plan.uses.length ? '<div class="stat"><span>Given a job</span><b>'+fmt(u)+'</b></div><div class="stat"><span>Still to assign</span><b>'+fmt(rem)+'</b></div>'+
+    (Math.round(rem)===0&&L>0?'<span class="pill ok">Every dollar has a job</span>':rem<0?'<span class="pill warn">That\'s '+fmt(-rem)+' more than you have left</span>':'') : '';
+}
+
+/* ---------- next steps ---------- */
+function themeOpts(sel){
+  var o='<option value="">Connects to…</option>';
+  S.story.themes.filter(function(t){return t.trim();}).forEach(function(t){o+='<option'+(t===sel?' selected':'')+'>'+esc(t)+'</option>';});
+  return o;
+}
+function themeSelects(){ document.querySelectorAll('select[data-ns]').forEach(function(s){ s.innerHTML=themeOpts(S.next[+s.dataset.ns].theme); }); }
+function renderNext(){
+  $('stepIdeas').innerHTML=STEP_IDEAS.map(function(t){return '<button class="chip" data-idea="'+esc(t)+'">'+esc(t)+'</button>';}).join('');
+  $('nsList').innerHTML=S.next.map(function(n,i){
+    return '<div class="card"><div class="ns"><div class="badge">'+(i+1)+'</div><div>'+
+      '<label class="f" for="ns'+i+'">Next step '+(i+1)+(i>0?' <span class="muted" style="font-weight:400">(optional)</span>':'')+'</label>'+
+      '<textarea id="ns'+i+'" data-p="next.'+i+'.text" rows="2" placeholder="Simple, attainable, clear"></textarea>'+
+      '<div class="meta"><select data-ns="'+i+'" aria-label="Which theme it connects to">'+themeOpts(n.theme)+'</select>'+
+      '<label class="check"><input type="checkbox" data-done="'+i+'"'+(n.done?' checked':'')+'> Done</label></div>'+
+      (n.done?'<div class="donebox"><span>Nice work. What\'s your next step?</span><button class="btn secondary" data-replace="'+i+'">Replace it</button></div>':'')+
+      '</div></div></div>';
+  }).join('');
+  fill($('nsList'));
+  $('doneCard').hidden=!S.done.length;
+  $('doneList').innerHTML=S.done.map(function(d){return '<li>'+esc(d)+'</li>';}).join('');
+}
+$('p-next').addEventListener('change',function(e){
+  var t=e.target;
+  if(t.dataset.ns!==undefined){ S.next[+t.dataset.ns].theme=t.value; save(); }
+  if(t.dataset.done!==undefined){ S.next[+t.dataset.done].done=t.checked; save(); renderNext(); }
+});
+$('p-next').addEventListener('click',function(e){
+  var c=e.target.closest('[data-idea]');
+  if(c){ var i=S.next.findIndex(function(n){return !n.text.trim();}); if(i<0){return;} S.next[i].text=c.dataset.idea; save(); renderNext(); $('ns'+i).focus(); }
+  var r=e.target.closest('[data-replace]');
+  if(r){ var k=+r.dataset.replace; if(S.next[k].text.trim()) S.done.push(S.next[k].text.trim()); S.next[k]={text:'',theme:'',done:false}; save(); renderNext(); $('ns'+k).focus(); }
+});
+
+/* ---------- retirement (same math as the original calculator) ---------- */
+function project(){
+  var R=S.ret, age0=parseInt(R.age,10); if(isNaN(age0)) age0=0;
+  var ageR=parseInt(R.retireAge,10); if(isNaN(ageR)) ageR=age0+1;
+  var years=Math.max(1,ageR-age0), bal=Math.max(0,num(R.savings)), tot=bal, mc=Math.max(0,num(R.monthly));
+  var mr=num(R.rate)/100/12, step=num(R.inc)/100, pts=[{age:age0,balance:bal,contrib:tot}];
+  for(var y=1;y<=years;y++){ for(var m=0;m<12;m++){ bal+=mc; tot+=mc; bal*=(1+mr); } mc*=(1+step); pts.push({age:age0+y,balance:bal,contrib:tot}); }
+  return {years:years,total:tot,final:bal,points:pts};
+}
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function calcRet(){
+  var r=project();
+  $('r-pre').textContent='In '+r.years+' year'+(r.years===1?'':'s')+', you could have';
+  $('r-final').textContent=fmt(r.final); $('r-in').textContent=fmt(r.total);
+  $('r-grow').textContent=fmt(Math.max(0,r.final-r.total)); $('r-inc').textContent=fmt(r.final*num(S.ret.wd)/100/12);
+  draw(r.points);
+}
+function draw(pts){
+  var cv=$('chart'); if(!cv.offsetParent) return;
+  var ctx=cv.getContext('2d'), dpr=window.devicePixelRatio||1, W=cv.clientWidth||600, H=220;
+  cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  var pl=54,pr=12,pt=12,pb=24,w=W-pl-pr,h=H-pt-pb,max=Math.max.apply(null,pts.map(function(p){return p.balance;}).concat([1])),n=pts.length;
+  var x=function(i){return pl+w*i/Math.max(1,n-1);}, y=function(v){return pt+h-h*v/max;};
+  var line=cssv('--line'), muted=cssv('--ink-muted');
+  var dark=matchMedia('(prefers-color-scheme:dark)').matches;
+  var c1=dark?'#5E7366':'#2F3B33', c2='#E8C98A', stroke=dark?'#E8C98A':'#2F3B33';
+  $('lg1').style.background=c1; $('lg2').style.background=c2;
+  ctx.font='11px Figtree, sans-serif'; ctx.lineWidth=1; ctx.strokeStyle=line; ctx.fillStyle=muted;
+  for(var g=0;g<=4;g++){ var v=max*g/4, yy=y(v); ctx.beginPath(); ctx.moveTo(pl,yy); ctx.lineTo(pl+w,yy); ctx.stroke();
+    ctx.fillText(v>=1e6?'$'+(v/1e6).toFixed(1)+'M':'$'+Math.round(v/1000)+'k',4,yy+4); }
+  ctx.beginPath(); ctx.moveTo(x(0),y(pts[0].balance)); pts.forEach(function(p,i){ctx.lineTo(x(i),y(p.balance));}); ctx.lineTo(x(n-1),y(0)); ctx.lineTo(x(0),y(0)); ctx.closePath();
+  ctx.globalAlpha=dark?.45:.75; ctx.fillStyle=c2; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x(0),y(0)); pts.forEach(function(p,i){ctx.lineTo(x(i),y(Math.min(p.contrib,p.balance)));}); ctx.lineTo(x(n-1),y(0)); ctx.closePath();
+  ctx.globalAlpha=dark?.9:.85; ctx.fillStyle=c1; ctx.fill(); ctx.globalAlpha=1;
+  ctx.beginPath(); pts.forEach(function(p,i){ i?ctx.lineTo(x(i),y(p.balance)):ctx.moveTo(x(i),y(p.balance)); }); ctx.strokeStyle=stroke; ctx.lineWidth=2.5; ctx.stroke();
+  ctx.fillStyle=muted;
+  [[0,'left'],[Math.floor((n-1)/2),'center'],[n-1,'right']].forEach(function(a){ctx.textAlign=a[1];ctx.fillText('Age '+pts[a[0]].age,x(a[0]),pt+h+16);}); ctx.textAlign='left';
+}
+$('pullPlan').addEventListener('click',function(){
+  var bal=S.plan.accounts.filter(function(a){return !/emergency/i.test(a.name);}).reduce(function(t,a){return t+num(a.bal);},0);
+  if(bal) S.ret.savings=String(Math.round(bal));
+  if(num(S.plan.retire)) S.ret.monthly=String(Math.round(num(S.plan.retire)/12));
+  fill($('p-retire')); save(); calcRet();
+});
+window.addEventListener('resize',function(){ if(S.tab==='retire') calcRet(); });
+
+/* ---------- summary ---------- */
+function li(arr){ var a=arr.filter(function(t){return String(t).trim();}); return a.length?'<ol>'+a.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>'; }
+function renderSummary(){
+  var st=S.story, p=S.plan, L=leftover();
+  var story='<div class="sub">Themes of my story</div>'+li(st.themes)+'<div class="sub">Barriers</div>'+li(st.barriers)+
+    (st.from||st.to?'<p>My story moves from <b>'+esc(st.from||'…')+'</b> to <b>'+esc(st.to||'…')+'</b></p>':'');
+  var uses=p.uses.filter(function(u){return u.name.trim()||num(u.amt);});
+  var plan='<div class="stat"><span>Take-home pay</span><b>'+fmt(num(p.takeHome))+'/mo</b></div>'+
+    '<div class="stat"><span>Expenses</span><b>'+fmt(expTotal())+'/mo</b></div>'+
+    '<div class="stat"><span>Margin for the unexpected</span><b>'+fmt(num(p.margin))+'/mo</b></div>'+
+    '<div class="stat"><span>Left to use</span><b>'+fmt(L)+'/mo</b></div>'+
+    '<div class="sub mt">How I\'ll use it</div>'+(uses.length?'<ol>'+uses.map(function(u){return '<li>'+esc(u.name||'Unnamed')+': <b>'+fmt(num(u.amt))+'/mo</b></li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>')+
+    (num(p.gross)?'<p class="small muted">Retirement savings rate: '+(num(p.retire)/num(p.gross)*100).toFixed(1)+'% of gross income</p>':'');
+  var nx=S.next.filter(function(n){return n.text.trim();});
+  var next=nx.length?'<ol>'+nx.map(function(n){return '<li>'+esc(n.text)+(n.theme?' <span class="muted small">('+esc(n.theme)+')</span>':'')+(n.done?' ✓':'')+'</li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>';
+  $('fw').innerHTML='<div class="fwbox"><div class="t">STORY</div><div class="b">'+story+'</div></div><div class="conn"></div>'+
+    '<div class="fwbox"><div class="t">PLAN</div><div class="b">'+plan+'</div></div><div class="conn"></div>'+
+    '<div class="fwbox"><div class="t">NEXT STEPS</div><div class="b">'+next+'</div></div>';
+}
+$('printBtn').addEventListener('click',function(){ renderSummary(); window.print(); });
+$('resetBtn').addEventListener('click',function(){
+  if(!$('resetBtn').dataset.sure){ $('resetBtn').dataset.sure='1'; $('resetBtn').textContent='Tap again to erase everything'; return; }
+  var keep={unlocked:S.unlocked,name:S.name}; S=clone(DEFAULT); S.unlocked=keep.unlocked; S.name=keep.name; save();
+  Object.keys(LISTS).forEach(renderList); fill(); recalc(); $('resetBtn').textContent='Start over'; delete $('resetBtn').dataset.sure; go('story');
+});
+$('igLink').href=INSTAGRAM_URL;
+
+/* ---------- init ---------- */
+fill(); recalc(); go(S.tab||'story');
+})();
+</script>
+</body>
+</html>
