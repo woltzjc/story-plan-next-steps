@@ -152,6 +152,17 @@ details.card ul{margin:12px 0 4px;padding-left:20px}
 .orderlist li:first-child{border-top:0}
 .orderlist .on{width:26px;height:26px;border-radius:99px;background:var(--surface-soft);font-size:13px;font-weight:700;display:grid;place-items:center}
 .orderlist .d{font-size:13px;line-height:19px;color:var(--ink-muted)}
+.prow{display:grid;grid-template-columns:110px 1fr 36px;gap:10px;align-items:center;margin-bottom:8px;max-width:460px}
+.prow .who{font-weight:600}
+.acct{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;background:var(--bg)}
+.acct .ah{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.acct .ah b{font-size:16px}
+.acct .ah select{width:auto;min-height:36px;padding:4px 10px;font-size:14px}
+.acct .af{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.acct .af label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+.acct .calc{font-size:14px;color:var(--ink-muted);margin-top:8px}
+.acct .chk2{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px}
+.acct .chk2 input{width:18px;height:18px;accent-color:var(--forest)}
 .focus{margin-top:12px;padding:12px 14px;border-left:3px solid var(--accent);background:var(--surface);font-size:15px}
 
 /* next steps */
@@ -315,21 +326,22 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <div class="rule"></div>
 
       <div class="card"><div class="step"><div class="badge">1</div><div style="flex:1">
-        <h3>Gross income and retirement contributions</h3>
-        <div class="grid2 mt">
-          <div><label class="f" for="pGross">Gross income (per year)</label><div class="money"><input type="text" inputmode="decimal" id="pGross" data-p="plan.gross"></div><div class="help">Before taxes. Include your spouse's if you share finances.</div></div>
-          <div><label class="f" for="pRet">Retirement contributions (per year)</label><div class="money"><input type="text" inputmode="decimal" id="pRet" data-p="plan.retire"></div><div class="help">What you put into 401(k)s, IRAs, etc. Include an employer match if you have one.</div></div>
-        </div>
-        <div id="o-rate"></div>
+        <h3>Gross income</h3>
+        <p class="muted small">Your yearly income before taxes.</p>
+        <div id="people"></div>
+        <button class="btn quiet" id="addSpouse">+ Add spouse or partner</button>
+        <p class="small mt" id="o-gross"></p>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">2</div><div style="flex:1">
-        <h3>Investment and emergency fund balances</h3>
-        <p class="muted small">What you have, and what you add each month. “Monthly” includes paycheck deductions, like a 401(k). Keep the name “Emergency fund” on your emergency savings so the tool can check it.</p>
-        <div class="rows" data-list="plan.accounts"></div>
-        <button class="btn quiet" data-add="plan.accounts">+ Add an account</button>
-        <p class="small mt" id="o-accts"></p>
+        <h3>Savings, retirement, and investments</h3>
+        <p class="muted small">Add the accounts you have. Don't have one? Leave it off. That's what the plan is for.</p>
+        <div id="accts"></div>
+        <div class="label" style="margin-top:6px">Add an account</div>
+        <div class="chips" id="acctAdd"></div>
+        <div id="o-rate"></div>
         <div id="o-ef"></div>
+        <div id="o-hsa"></div>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">3</div><div style="flex:1">
@@ -351,12 +363,6 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <p class="muted small">Look at the last few months of bank and card statements. Most people guess low.</p>
         <div class="rows" data-list="plan.expenses"></div>
         <button class="btn quiet" data-add="plan.expenses">+ Add an expense</button>
-        <div class="mt">
-          <label class="f" for="pXfer">Savings you already move from your bank account each month</label>
-          <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pXfer" data-p="plan.saveXfer"></div>
-          <div class="help">Transfers to savings or investments that come out of your take-home pay. Don't include paycheck deductions like a 401(k); those never reach your bank account.</div>
-          <div class="chips" id="xferChips"></div>
-        </div>
         <div class="mt" id="o-exp"></div>
       </div></div></div>
 
@@ -491,25 +497,36 @@ var KEY = 'ptp-spn-v1';
 var DEFAULT = {
   unlocked:false, name:'',
   story:{themes:['','',''], barriers:['','',''], from:'', to:''},
-  plan:{gross:'', retire:'',
-    accounts:[{name:'Emergency fund',bal:'',add:''},{name:'Retirement accounts',bal:'',add:''},{name:'Brokerage / other investments',bal:'',add:''}],
+  plan:{people:[{gross:''}],
+    accts:[{type:'ef',owner:0,name:'',bal:'',amt:'',per:'mo',pct:'',match:'',need:'',payroll:true}],
     debts:[{name:'',bal:'',rate:'',min:''}],
     takeHome:'',
     expenses:[{name:'Housing',amt:''},{name:'Utilities',amt:''},{name:'Groceries',amt:''},{name:'Transportation',amt:''},{name:'Insurance',amt:''},{name:'Kids / childcare',amt:''},{name:'Subscriptions',amt:''},{name:'Everything else',amt:''}],
-    margin:'', saveXfer:'', uses:[]},
+    margin:'', uses:[]},
   next:[{text:'',theme:'',done:false},{text:'',theme:'',done:false},{text:'',theme:'',done:false}],
   done:[],
   ret:{age:'38', retireAge:'65', savings:'50000', monthly:'750', rate:'6', inc:'0', wd:'4'},
   tab:'story'
 };
 var LISTS = {
-  'plan.accounts':{cls:'cols-acct', blank:{name:'',bal:'',add:''}, cols:[['name','Account','text'],['bal','Balance','money'],['add','Monthly','money']]},
   'plan.debts':{cls:'cols-debt', blank:{name:'',bal:'',rate:'',min:''}, cols:[['name','Debt','text'],['bal','Balance','money'],['rate','Rate','pct'],['min','Min. payment / mo','money']]},
   'plan.expenses':{cls:'cols-exp', blank:{name:'',amt:''}, cols:[['name','Expense','text'],['amt','Per month','money']]},
   'plan.uses':{cls:'cols-use', blank:{name:'',amt:''}, cols:[['name','Use','text'],['amt','Per month','money']]}
 };
 var THEME_IDEAS = ['Memories','Experiences','Generosity','Family','Faith','Freedom','Adventure','Health','Rest','Security','Legacy','Community','Travel','Margin'];
 var BARRIER_IDEAS = ['Income too low','Too much debt','Not enough time','Permission to enjoy life now','Not on the same page with my spouse','Not sure where to start','Not enough saved for retirement'];
+// Account types for step 2. ret = counts toward the retirement guideline; th = contributions come out of take-home pay.
+var ACCT = {
+  work:     {label:'401(k) / 403(b)', ret:true,  th:false, owner:true},
+  roth:     {label:'Roth IRA',        ret:true,  th:true,  owner:true},
+  trad:     {label:'Traditional IRA', ret:true,  th:true,  owner:true},
+  brokerage:{label:'Brokerage',       ret:false, th:true},
+  hsa:      {label:'HSA',             ret:false, th:true,  owner:true, hsa:true},
+  ef:       {label:'Emergency fund',  ret:false, th:true},
+  savings:  {label:'Other savings',   ret:false, th:true, named:true},
+  other:    {label:'Other',           ret:false, th:true, named:true}
+};
+var ACCT_ORDER=['work','roth','trad','brokerage','hsa','ef','savings','other'];
 var STEP_IDEAS = ['Start a budget','Trim expenses or raise income','Pay off debt, highest interest rate first','Build a 3–6 month emergency fund','Open a brokerage account','Invest a set amount from every paycheck'];
 
 var S = load();
@@ -519,6 +536,9 @@ function load(){
   var d=clone(DEFAULT); if(!s) return d;
   for(var k in d){ if(s[k]===undefined) s[k]=d[k]; }
   ['story','plan','ret'].forEach(function(k){ for(var j in d[k]) if(s[k][j]===undefined) s[k][j]=d[k][j]; });
+  // carry over answers saved by the earlier version of the tool
+  if(s.plan.gross!==undefined){ if(!num(s.plan.people[0].gross)) s.plan.people[0].gross=s.plan.gross; delete s.plan.gross; delete s.plan.retire; delete s.plan.saveXfer; }
+  if(s.plan.accounts){ var ef=s.plan.accounts.filter(function(a){return /emergency/i.test(a.name);})[0]; if(ef&&s.plan.accts[0]&&s.plan.accts[0].type==='ef'&&!num(s.plan.accts[0].bal)){ s.plan.accts[0].bal=ef.bal; s.plan.accts[0].amt=ef.add; } delete s.plan.accounts; }
   return s;
 }
 var saveT; function save(){ clearTimeout(saveT); saveT=setTimeout(function(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} },150); }
@@ -560,10 +580,10 @@ document.addEventListener('click',function(e){
 });
 
 /* ---------- generic inputs ---------- */
-function fill(root){ (root||document).querySelectorAll('[data-p]').forEach(function(el){ var v=getP(el.dataset.p); el.value=v==null?'':v; }); }
+function fill(root){ (root||document).querySelectorAll('[data-p]').forEach(function(el){ var v=getP(el.dataset.p); if(el.type==='checkbox') el.checked=!!v; else el.value=v==null?'':v; }); }
 document.addEventListener('input',function(e){
   var el=e.target; if(!el.dataset||!el.dataset.p) return;
-  setP(el.dataset.p, el.value); save(); recalc();
+  setP(el.dataset.p, el.type==='checkbox'?el.checked:el.value); save(); recalc();
   if(el.dataset.p.indexOf('ret.')===0) calcRet();
   if(el.dataset.p.indexOf('story.themes')===0) themeSelects();
 });
@@ -602,11 +622,56 @@ $('barrierIdeas').addEventListener('click',function(e){
   var i=S.story.barriers.findIndex(function(t){return !t.trim();}); if(i<0) i=2;
   S.story.barriers[i]=c.dataset.barrier; fill($('p-story')); save();
 });
-function xferChips(){
-  var a=nonRetireAdds();
-  $('xferChips').innerHTML = a>0 ? '<button class="chip" data-x="'+Math.round(a)+'">Use '+fmt(a)+' from step 2 (non-retirement accounts)</button>' : '';
+/* ---------- step 1: people ---------- */
+function who(i){ return S.plan.people.length>1 ? (i===0?'You':'Spouse / partner') : 'You'; }
+function renderPeople(){
+  $('people').innerHTML=S.plan.people.map(function(p,i){
+    return '<div class="prow"><span class="who">'+who(i)+'</span><div class="money"><input type="text" inputmode="decimal" data-p="plan.people.'+i+'.gross" aria-label="'+who(i)+' gross income per year" placeholder="Per year"></div>'+
+      (i>0?'<button class="x" id="rmSpouse" aria-label="Remove spouse">×</button>':'<span></span>')+'</div>';
+  }).join('');
+  $('addSpouse').hidden=S.plan.people.length>1;
+  fill($('people'));
 }
-$('xferChips').addEventListener('click',function(e){var c=e.target.closest('[data-x]');if(!c)return;S.plan.saveXfer=c.dataset.x;$('pXfer').value=c.dataset.x;save();recalc();});
+$('addSpouse').addEventListener('click',function(){ S.plan.people.push({gross:''}); save(); renderPeople(); renderAccts(); recalc(); });
+$('people').addEventListener('click',function(e){ if(e.target.id!=='rmSpouse') return;
+  S.plan.people.splice(1); S.plan.accts.forEach(function(a){a.owner=0;}); save(); renderPeople(); renderAccts(); recalc(); });
+
+/* ---------- step 2: accounts ---------- */
+function blankAcct(t){ return {type:t,owner:0,name:'',bal:'',amt:'',per:t==='hsa'?'yr':'mo',pct:'',match:'',need:'',payroll:t==='hsa'}; }
+function moneyF(path,label){ return '<div><label>'+label+'</label><div class="money"><input type="text" inputmode="decimal" data-p="'+path+'"></div></div>'; }
+function pctF(path,label){ return '<div><label>'+label+'</label><div class="pct"><input type="text" inputmode="decimal" data-p="'+path+'"></div></div>'; }
+function renderAccts(){
+  var two=S.plan.people.length>1;
+  $('accts').innerHTML=S.plan.accts.map(function(a,i){
+    var T=ACCT[a.type]||ACCT.other, p='plan.accts.'+i+'.';
+    var head='<div class="ah"><b>'+(T.named?'<input type="text" data-p="'+p+'name" placeholder="'+T.label+'" aria-label="Account name" style="min-height:36px;padding:4px 10px;font-weight:600;max-width:220px">':T.label)+'</b><span style="display:flex;gap:8px;align-items:center">'+
+      (two&&T.owner?'<select data-p="'+p+'owner" aria-label="Whose account"><option value="0">Yours</option><option value="1">Spouse\'s</option></select>':'')+
+      '<button class="x" data-rmacct="'+i+'" aria-label="Remove '+T.label+'">×</button></span></div>';
+    var body;
+    if(a.type==='work'){
+      body='<div class="af">'+moneyF(p+'bal','Balance')+pctF(p+'pct','You contribute (% of pay)')+pctF(p+'match','Employer adds (% of pay)')+pctF(p+'need','You must put in this much for the full match')+'</div>'+
+        '<div class="help">Check your benefits info for the match. Leave the match boxes blank if there isn\'t one.</div><div class="calc" id="wc'+i+'"></div>';
+    } else {
+      body='<div class="af">'+moneyF(p+'bal','Balance')+moneyF(p+'amt','You add')+
+        '<div><label>How often</label><select data-p="'+p+'per"><option value="mo">Per month</option><option value="yr">Per year</option></select></div></div>'+
+        (a.type==='hsa'?'<label class="chk2"><input type="checkbox" data-p="'+p+'payroll"> Comes out of my paycheck</label>':'')+
+        (a.type==='savings'?'<div class="help">Separate from your emergency fund, like a car or vacation fund. If this is your emergency fund, use the Emergency fund card instead.</div>':'')+
+        (a.type==='brokerage'?'<div class="help">Investments outside of retirement accounts. These don\'t count toward the retirement guideline.</div>':'')+
+        (a.type==='hsa'?'<div class="help">Health savings account. Shown separately from retirement.</div>':'');
+    }
+    return '<div class="acct">'+head+body+'</div>';
+  }).join('');
+  var have=S.plan.accts.map(function(a){return a.type;});
+  $('acctAdd').innerHTML=ACCT_ORDER.filter(function(t){ return !(t==='ef'&&have.indexOf('ef')>=0); })
+    .map(function(t){return '<button class="chip" data-addacct="'+t+'">+ '+ACCT[t].label+'</button>';}).join('');
+  fill($('accts'));
+}
+$('acctAdd').addEventListener('click',function(e){ var c=e.target.closest('[data-addacct]'); if(!c) return;
+  S.plan.accts.push(blankAcct(c.dataset.addacct)); save(); renderAccts(); recalc();
+  var cards=document.querySelectorAll('#accts .acct'); var inp=cards[cards.length-1].querySelector('.af input'); if(inp) inp.focus(); });
+$('accts').addEventListener('click',function(e){ var b=e.target.closest('[data-rmacct]'); if(!b) return;
+  S.plan.accts.splice(+b.dataset.rmacct,1); save(); renderAccts(); recalc(); });
+$('accts').addEventListener('change',function(e){ if(e.target.matches('select,input[type=checkbox]')) recalc(); });
 function marginChips(){
   var exp=expTotal();
   $('marginChips').innerHTML=[5,10].map(function(p){return '<button class="chip" data-m="'+Math.round(exp*p/100)+'">'+p+'% of expenses ('+fmt(exp*p/100)+')</button>';}).join('');
@@ -614,6 +679,7 @@ function marginChips(){
 $('marginChips').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;S.plan.margin=c.dataset.m;$('pMargin').value=c.dataset.m;save();recalc();});
 $('suggestUses').addEventListener('click',function(){
   var m=efMonths(), r=retRate(), hd=highDebts(), add=[];
+  if(matchGaps().length) add.push('Raise 401(k) to get the full match');
   if(hd.length) add.push('Extra payment: '+(hd[0].name||'highest-rate debt'));
   if(m===null||m<GUIDE.efMin) add.push('Emergency fund');
   if(r===null||r<GUIDE.retireTarget) add.push('Retirement');
@@ -623,11 +689,12 @@ $('suggestUses').addEventListener('click',function(){
 });
 function suggestions(){
   var s=[], m=efMonths(), r=retRate(), hd=highDebts();
-  if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
   if(m!==null&&m<GUIDE.efStarter) s.push('Save '+fmt(expTotal()*GUIDE.efStarter)+' as a starter emergency fund');
-  else if(m!==null&&m<GUIDE.efMin) s.push('Build my emergency fund to '+GUIDE.efMin+' months ('+fmt(expTotal()*GUIDE.efMin)+')');
-  if(r!==null&&r<GUIDE.retireTarget) s.push('Raise my retirement contribution by 1% of my pay');
-  if(r!==null&&r<GUIDE.retireTarget) s.push('Make sure I\'m getting my full employer match');
+  matchGaps().forEach(function(a){ s.push('Raise '+(S.plan.people.length>1&&+a.owner===1?'my spouse\'s':'my')+' 401(k) from '+num(a.pct)+'% to '+num(a.need)+'% to get the full match'); });
+  if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
+  if(m!==null&&m>=GUIDE.efStarter&&m<GUIDE.efMin) s.push('Build my emergency fund to '+GUIDE.efMin+' months ('+fmt(expTotal()*GUIDE.efMin)+')');
+  if(!hasRetireAcct()) s.push('Open a Roth IRA and set up an automatic monthly contribution');
+  else if(r!==null&&r<GUIDE.retireTarget) s.push('Raise my retirement savings by 1% of my pay');
   var t=S.story.themes.filter(function(x){return x.trim();})[0];
   if(t) s.push('Open a separate savings account for '+t.toLowerCase()+' and automate it each payday');
   return s;
@@ -643,43 +710,74 @@ $('seedUses').addEventListener('click',function(){
 /* ---------- plan math ---------- */
 function debtMin(){return sum(S.plan.debts,'min');}
 function expTotal(){return sum(S.plan.expenses,'amt')+debtMin();}
-function leftover(){return num(S.plan.takeHome)-expTotal()-num(S.plan.saveXfer)-num(S.plan.margin);}
-function efBal(){return S.plan.accounts.filter(function(a){return /emergency/i.test(a.name);}).reduce(function(t,a){return t+num(a.bal);},0);}
-function hasEF(){return S.plan.accounts.some(function(a){return /emergency/i.test(a.name);});}
+function grossTotal(){return S.plan.people.reduce(function(t,p){return t+num(p.gross);},0);}
+function ownerGross(a){var p=S.plan.people[+a.owner||0]||S.plan.people[0]; return num(p.gross);}
+function yearly(a){return num(a.amt)*(a.per==='yr'?1:12);}
+function workYou(a){return ownerGross(a)*num(a.pct)/100;}
+function workEmployer(a){ // if they put in less than the match requires, assume the match scales down with them
+  var m=num(a.match), need=num(a.need), pct=num(a.pct);
+  if(need>0&&pct<need) m=m*pct/need;
+  return ownerGross(a)*m/100;
+}
+function retireYearly(){return S.plan.accts.reduce(function(t,a){ if(a.type==='work') return t+workYou(a)+workEmployer(a); return (ACCT[a.type]||{}).ret ? t+yearly(a) : t; },0);}
+function hasRetireAcct(){return S.plan.accts.some(function(a){return (ACCT[a.type]||{}).ret;});}
+function fromTakeHome(){ // monthly savings & investing that leaves the bank account
+  return S.plan.accts.reduce(function(t,a){ var T=ACCT[a.type]||ACCT.other; if(a.type==='work') return t; if(a.type==='hsa'&&a.payroll) return t; return T.th? t+yearly(a)/12 : t; },0);
+}
+function matchGaps(){return S.plan.accts.filter(function(a){return a.type==='work'&&num(a.need)>0&&num(a.pct)<num(a.need);});}
+function hasMatchInfo(){return S.plan.accts.some(function(a){return a.type==='work'&&num(a.need)>0;});}
+function retireBal(){return S.plan.accts.reduce(function(t,a){return (ACCT[a.type]||{}).ret?t+num(a.bal):t;},0);}
+function leftover(){return num(S.plan.takeHome)-expTotal()-fromTakeHome()-num(S.plan.margin);}
+function efBal(){return S.plan.accts.filter(function(a){return a.type==='ef';}).reduce(function(t,a){return t+num(a.bal);},0);}
+function hasEF(){return S.plan.accts.some(function(a){return a.type==='ef';});}
 function efMonths(){var e=expTotal(); return (e>0&&hasEF())?efBal()/e:null;}
-function retRate(){var g=num(S.plan.gross); return g>0?num(S.plan.retire)/g*100:null;}
+function retRate(){var g=grossTotal(); return g>0?retireYearly()/g*100:null;}
 function highDebts(){return S.plan.debts.filter(function(d){return num(d.rate)>=GUIDE.highRate&&(num(d.bal)>0||d.name.trim());}).sort(function(a,b){return num(b.rate)-num(a.rate);});}
-function nonRetireAdds(){return S.plan.accounts.filter(function(a){return !/retire|401|403|457|ira|roth|tsp|pension/i.test(a.name);}).reduce(function(t,a){return t+num(a.add);},0);}
 function pill(cls,txt){return '<span class="pill '+cls+'">'+txt+'</span>';}
 function mo(m){return m.toFixed(1)+' month'+(m.toFixed(1)==='1.0'?'':'s');}
 function orderItems(){
-  var m=efMonths(), r=retRate(), hd=highDebts();
+  var m=efMonths(), r=retRate(), hd=highDebts(), mg=matchGaps(), hasWork=S.plan.accts.some(function(a){return a.type==='work';});
   return [
-    {t:'Starter emergency fund, plus any employer match', d:'About '+GUIDE.efStarter+' month of expenses set aside. If your employer matches retirement contributions, put in enough to get the full match.',
+    {t:'Starter emergency fund', d:'About '+GUIDE.efStarter+' month of expenses set aside.',
       s: m===null?'n':(m>=GUIDE.efStarter?'ok':'warn'), l: m===null?'Fill in steps 2 & 5':(m>=GUIDE.efStarter?'Done':'Start here')},
+    {t:'Get your full employer match', d:'If your employer matches 401(k) contributions, put in at least enough to get all of it.',
+      s: mg.length?'warn':(hasMatchInfo()?'ok':'n'), l: mg.length?'Missing some':(hasMatchInfo()?'Done':(hasWork?'Add match info':'If you have one'))},
     {t:'Pay off high-interest debt ('+GUIDE.highRate+'%+)', d:'Highest rate first. These usually cost more than you would give up by pausing extra investing.',
       s: hd.length?'warn':'ok', l: hd.length?hd.length+' to go':'None'},
     {t:'Build your emergency fund to '+GUIDE.efMin+'–'+GUIDE.efMax+' months', d:'So one surprise doesn\'t turn into new debt.',
       s: m===null?'n':(m>=GUIDE.efMin?'ok':'warn'), l: m===null?'Fill in steps 2 & 5':(m>=GUIDE.efMin?'Done':mo(m)+' now')},
     {t:'Work toward '+GUIDE.retireTarget+'% of gross income for retirement', d:'Including any employer match.',
-      s: r===null?'n':(r>=GUIDE.retireTarget?'ok':'warn'), l: r===null?'Fill in step 1':r.toFixed(1)+'% now'},
+      s: r===null?'n':(r>=GUIDE.retireTarget?'ok':'warn'), l: r===null?'Fill in steps 1 & 2':(r>0?r.toFixed(1)+'% now':'Not started yet')},
     {t:'Fund your story goals all along the way', d:'Memories, experiences, generosity. You don\'t have to wait until everything else is done. Give them a slice every month.',
       s:'ok', l:'Always'}
   ];
 }
 function recalc(){
-  var g=num(S.plan.gross), r=num(S.plan.retire), rr=retRate();
-  $('o-rate').innerHTML = g>0 ? '<p class="note">You\'re putting <b>'+rr.toFixed(1)+'%</b> of your gross income toward retirement.'+
-      (rr>=GUIDE.retireTarget?pill('ok','At or above '+GUIDE.retireTarget+'%'):pill('warn','Below '+GUIDE.retireTarget+'%'))+'</p>'+
-      '<div class="tip"><b>Rule of thumb:</b> many people aim to save about '+GUIDE.retireTarget+'% of gross income for retirement, including any employer match. If you\'re not there yet, that\'s okay. Your plan will show you how to work toward it.</div>' : '';
+  var g=grossTotal(), rr=retRate();
+  $('o-gross').innerHTML = S.plan.people.length>1&&g>0 ? 'Household gross income: <b>'+fmt(g)+'</b> a year.' : '';
+  // per-card 401(k) math
+  S.plan.accts.forEach(function(a,i){ if(a.type!=='work') return; var el=$('wc'+i); if(!el) return;
+    if(!ownerGross(a)){ el.textContent='Add '+(S.plan.people.length>1&&+a.owner===1?'your spouse\'s':'your')+' income in step 1 to see the dollar amounts.'; return; }
+    var gap=num(a.need)>0&&num(a.pct)<num(a.need);
+    el.innerHTML='That\'s about <b>'+fmt(workYou(a))+'</b>/yr from '+(+a.owner===1&&S.plan.people.length>1?'your spouse':'you')+(num(a.match)?' + <b>'+fmt(workEmployer(a))+'</b>/yr from the employer':'')+'.'+
+      (gap?' '+pill('warn','Missing part of the match'):(num(a.need)>0?' '+pill('ok','Getting the full match'):''));
+  });
+  // retirement guideline
+  if(!hasRetireAcct()) $('o-rate').innerHTML='<div class="tip">No retirement accounts yet? That\'s okay. That\'s exactly what your plan and next steps are for.</div>';
+  else if(g<=0) $('o-rate').innerHTML='<div class="tip">Add your income in step 1 to see your retirement savings rate.</div>';
+  else $('o-rate').innerHTML='<p class="note">'+(S.plan.people.length>1?'Your household is':'You\'re')+' putting <b>'+rr.toFixed(1)+'%</b> of gross income toward retirement.'+
+      (rr>=GUIDE.retireTarget?pill('ok','At or above '+GUIDE.retireTarget+'%'):rr>0?pill('warn','Below '+GUIDE.retireTarget+'%'):pill('n','Not started yet'))+'</p>'+
+      '<div class="tip"><b>Rule of thumb:</b> many people aim to save about '+GUIDE.retireTarget+'% of gross income for retirement, including any employer match. Brokerage and HSA accounts aren\'t counted here. If you\'re not there yet, that\'s okay. Your plan will show you how to work toward it.</div>';
+  // emergency fund guideline
   var m=efMonths();
-  if(!hasEF()) $('o-ef').innerHTML='<div class="tip">Add an account named “Emergency fund” to see how many months of expenses it covers.</div>';
+  if(!hasEF()) $('o-ef').innerHTML='<div class="tip">Add an Emergency fund card to see how many months of expenses it covers.</div>';
   else if(expTotal()<=0) $('o-ef').innerHTML='<div class="tip">Fill in your monthly expenses in step 5 and you\'ll see how many months your emergency fund covers.</div>';
   else $('o-ef').innerHTML='<p class="note">Your emergency fund covers <b>'+mo(m)+'</b> of expenses.'+
-      (m>=GUIDE.efMin?pill('ok','Within the '+GUIDE.efMin+'–'+GUIDE.efMax+' month range'+(m>GUIDE.efMax?' (and then some)':'')):m>=GUIDE.efStarter?pill('warn','Starter cushion in place'):pill('warn','Under '+GUIDE.efStarter+' month'))+'</p>'+
+      (m>=GUIDE.efMin?pill('ok','Within the '+GUIDE.efMin+'–'+GUIDE.efMax+' month range'+(m>GUIDE.efMax?' (and then some)':'')):m>=GUIDE.efStarter?pill('warn','Starter cushion in place'):m>0?pill('warn','Under '+GUIDE.efStarter+' month'):pill('n','Not started yet'))+'</p>'+
       '<div class="tip"><b>Rule of thumb:</b> keep '+GUIDE.efMin+'–'+GUIDE.efMax+' months of expenses in an emergency fund before investing beyond an employer match. That\'s '+fmt(expTotal()*GUIDE.efMin)+'–'+fmt(expTotal()*GUIDE.efMax)+' for you.</div>';
-  var a=S.plan.accounts;
-  $('o-accts').innerHTML = a.length ? 'Total: <b>'+fmt(sum(a,'bal'))+'</b> saved, <b>'+fmt(sum(a,'add'))+'</b> added each month.' : '';
+  // HSA, shown on its own
+  var hs=S.plan.accts.filter(function(a){return a.type==='hsa';});
+  $('o-hsa').innerHTML = hs.length&&(sum(hs,'bal')||hs.some(function(a){return num(a.amt);})) ? '<p class="note">HSA: <b>'+fmt(sum(hs,'bal'))+'</b> saved, <b>'+fmt(hs.reduce(function(t,a){return t+yearly(a);},0))+'</b> added per year. Tracked separately from retirement.</p>' : '';
   var ds=S.plan.debts.filter(function(d){return d.name.trim()||num(d.bal);});
   if(ds.length){
     var sorted=ds.slice().sort(function(x,y){return num(y.rate)-num(x.rate);});
@@ -691,12 +789,13 @@ function recalc(){
   $('o-exp').innerHTML='<div class="stat"><span>Expenses above</span><b>'+fmt(sum(S.plan.expenses,'amt'))+'</b></div>'+
     '<div class="stat"><span>Debt minimum payments (from step 3)</span><b>'+fmt(dm)+'</b></div>'+
     '<div class="stat"><span>Total monthly expenses</span><b>'+fmt(et)+'</b></div>'+
-    '<div class="stat"><span>Savings you already move each month</span><b>'+fmt(num(S.plan.saveXfer))+'</b></div>'+
-    '<div class="stat"><span>Take-home minus expenses and savings</span><b>'+fmt(th-et-num(S.plan.saveXfer))+'</b></div>';
-  marginChips(); xferChips();
+    '<div class="stat"><span>Saving &amp; investing from take-home (from step 2)</span><b>'+fmt(fromTakeHome())+'</b></div>'+
+    '<div class="stat"><span>Take-home minus expenses and savings</span><b>'+fmt(th-et-fromTakeHome())+'</b></div>'+
+    '<p class="help">401(k) contributions aren\'t subtracted here, since they come out before your paycheck hits the bank.</p>';
+  marginChips();
   var L=leftover();
   $('o-left').textContent=fmt(L);
-  $('o-leftmath').textContent=fmt(th)+' take-home − '+fmt(et)+' expenses − '+fmt(num(S.plan.saveXfer))+' savings already happening − '+fmt(num(S.plan.margin))+' margin';
+  $('o-leftmath').textContent=fmt(th)+' take-home − '+fmt(et)+' expenses − '+fmt(fromTakeHome())+' saving & investing − '+fmt(num(S.plan.margin))+' margin';
   var items=orderItems(), focus=items.filter(function(i){return i.s==='warn';})[0];
   $('o-order').innerHTML='<b>A common order of priorities</b> (general guidelines, not personal advice):<ol class="orderlist">'+
     items.map(function(it,i){return '<li><span class="on">'+(i+1)+'</span><div><div style="font-weight:600">'+it.t+'</div><div class="d">'+it.d+'</div></div>'+pill(it.s,it.l)+'</li>';}).join('')+'</ol>'+
@@ -780,9 +879,9 @@ function draw(pts){
   [[0,'left'],[Math.floor((n-1)/2),'center'],[n-1,'right']].forEach(function(a){ctx.textAlign=a[1];ctx.fillText('Age '+pts[a[0]].age,x(a[0]),pt+h+16);}); ctx.textAlign='left';
 }
 $('pullPlan').addEventListener('click',function(){
-  var bal=S.plan.accounts.filter(function(a){return !/emergency/i.test(a.name);}).reduce(function(t,a){return t+num(a.bal);},0);
+  var bal=retireBal(), yr=retireYearly();
   if(bal) S.ret.savings=String(Math.round(bal));
-  if(num(S.plan.retire)) S.ret.monthly=String(Math.round(num(S.plan.retire)/12));
+  if(yr) S.ret.monthly=String(Math.round(yr/12));
   fill($('p-retire')); save(); calcRet();
 });
 window.addEventListener('resize',function(){ if(S.tab==='retire') calcRet(); });
@@ -796,11 +895,12 @@ function renderSummary(){
   var uses=p.uses.filter(function(u){return u.name.trim()||num(u.amt);});
   var plan='<div class="stat"><span>Take-home pay</span><b>'+fmt(num(p.takeHome))+'/mo</b></div>'+
     '<div class="stat"><span>Expenses</span><b>'+fmt(expTotal())+'/mo</b></div>'+
-    (num(p.saveXfer)?'<div class="stat"><span>Savings already happening</span><b>'+fmt(num(p.saveXfer))+'/mo</b></div>':'')+
+    (fromTakeHome()?'<div class="stat"><span>Saving &amp; investing already happening</span><b>'+fmt(fromTakeHome())+'/mo</b></div>':'')+
     '<div class="stat"><span>Margin for the unexpected</span><b>'+fmt(num(p.margin))+'/mo</b></div>'+
     '<div class="stat"><span>Left to use</span><b>'+fmt(L)+'/mo</b></div>'+
     '<div class="sub mt">How I\'ll use it</div>'+(uses.length?'<ol>'+uses.map(function(u){return '<li>'+esc(u.name||'Unnamed')+': <b>'+fmt(num(u.amt))+'/mo</b></li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>')+
-    (num(p.gross)?'<p class="small muted" style="margin:0">Retirement savings rate: '+(num(p.retire)/num(p.gross)*100).toFixed(1)+'% of gross income (guideline: '+GUIDE.retireTarget+'%)</p>':'')+
+    (retRate()!==null&&hasRetireAcct()?'<p class="small muted" style="margin:0">Retirement savings rate: '+retRate().toFixed(1)+'% of gross income (guideline: '+GUIDE.retireTarget+'%)</p>':'')+
+    (hasMatchInfo()?'<p class="small muted" style="margin:0">Employer match: '+(matchGaps().length?'not getting all of it yet':'getting the full match')+'</p>':'')+
     (efMonths()!==null?'<p class="small muted">Emergency fund: '+mo(efMonths())+' of expenses (guideline: '+GUIDE.efMin+'–'+GUIDE.efMax+')</p>':'');
   var nx=S.next.filter(function(n){return n.text.trim();});
   var next=nx.length?'<ol>'+nx.map(function(n){return '<li>'+esc(n.text)+(n.theme?' <span class="muted small">('+esc(n.theme)+')</span>':'')+(n.done?' ✓':'')+'</li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>';
@@ -812,12 +912,12 @@ $('printBtn').addEventListener('click',function(){ renderSummary(); window.print
 $('resetBtn').addEventListener('click',function(){
   if(!$('resetBtn').dataset.sure){ $('resetBtn').dataset.sure='1'; $('resetBtn').textContent='Tap again to erase everything'; return; }
   var keep={unlocked:S.unlocked,name:S.name}; S=clone(DEFAULT); S.unlocked=keep.unlocked; S.name=keep.name; save();
-  Object.keys(LISTS).forEach(renderList); fill(); recalc(); $('resetBtn').textContent='Start over'; delete $('resetBtn').dataset.sure; go('story');
+  Object.keys(LISTS).forEach(renderList); renderPeople(); renderAccts(); fill(); recalc(); $('resetBtn').textContent='Start over'; delete $('resetBtn').dataset.sure; go('story');
 });
 $('igLink').href=INSTAGRAM_URL;
 
 /* ---------- init ---------- */
-fill(); recalc(); go(S.tab||'story');
+renderPeople(); renderAccts(); fill(); recalc(); go(S.tab||'story');
 })();
 </script>
 </body>
