@@ -164,8 +164,8 @@ details.lv[open] summary::after{content:'–'}
 .lvsteps>li{margin-bottom:10px}
 .lvsteps ul{margin:4px 0 0;padding-left:18px;color:var(--ink-muted)}
 .lvsteps ul li{margin-bottom:2px}
-.prow{display:grid;grid-template-columns:110px 1fr 36px;gap:10px;align-items:center;margin-bottom:8px;max-width:460px}
-.prow .who{font-weight:600}
+.prow{display:grid;grid-template-columns:1.3fr 1fr 36px;gap:10px;align-items:center;margin-bottom:8px;max-width:560px}
+.prow.hdr{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);margin:10px 0 4px}
 .acct{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;background:var(--bg)}
 .acct .ah{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
 .acct .ah b{font-size:16px}
@@ -184,7 +184,9 @@ details.lv[open] summary::after{content:'–'}
   .badge[data-of]::before{content:'STEP '}
   .badge[data-of]::after{content:' OF ' attr(data-of)}
   .prow{grid-template-columns:1fr 36px;max-width:none}
-  .prow .who{grid-column:1/-1}
+  .prow>input{grid-column:1/-1}
+  .prow.hdr{display:none}
+  #people .prow{padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:10px}
   .orderlist li{grid-template-columns:26px 1fr}
   .orderlist li>.pill{grid-column:2;justify-self:start}
   nav.tabs{flex-wrap:wrap;gap:0 2px}
@@ -415,9 +417,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
 
       <div class="card"><div class="step"><div class="badge">1</div><div style="flex:1">
         <h3>Gross income</h3>
-        <p class="muted small">Your yearly income before taxes.</p>
+        <p class="muted small">Yearly income before taxes. Add a line for each person or source, like a spouse, side business, or rental property.</p>
+        <div class="prow hdr" aria-hidden="true"><span>Name or source</span><span>Per year</span><span></span></div>
         <div id="people"></div>
-        <button class="btn quiet" id="addSpouse">+ Add spouse or partner</button>
+        <button class="btn quiet" id="addSpouse">+ Add income</button>
         <p class="small mt" id="o-gross"></p>
       </div></div></div>
 
@@ -443,7 +446,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <h3>Take-home pay</h3>
         <label class="f" for="pTake">What actually lands in your bank account each month</label>
         <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pTake" data-p="plan.takeHome"></div>
-        <div class="help">After taxes and paycheck deductions.</div>
+        <div class="help">After taxes and paycheck deductions. Include any other money that lands in your account each month, like rental or side-business income after its expenses.</div>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">5</div><div style="flex:1">
@@ -587,7 +590,7 @@ var KEY = 'ptp-spn-v1';
 var DEFAULT = {
   unlocked:false, name:'',
   story:{themes:['','',''], barriers:['','',''], from:'', to:''},
-  plan:{people:[{gross:''}],
+  plan:{people:[{name:'',gross:''}],
     accts:[{type:'ef',owner:0,name:'',bal:'',amt:'',per:'mo',pct:'',match:'',need:'',payroll:true}],
     debts:[{name:'',bal:'',rate:'',min:''}],
     takeHome:'',
@@ -652,7 +655,7 @@ $('gateForm').addEventListener('submit',function(e){
   var email=$('gEmail').value.trim(), name=$('gName').value.trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ $('gErr').textContent='Please enter a valid email address.'; $('gEmail').focus(); return; }
   $('gErr').textContent=''; $('gBtn').disabled=true; $('gBtn').textContent='One moment…';
-  var done=function(){ S.unlocked=true; S.name=name; save(); unlock(); window.scrollTo(0,0); };
+  var done=function(){ S.unlocked=true; S.name=name; if(name&&!S.plan.people[0].name){ S.plan.people[0].name=name; renderPeople(); renderAccts(); } save(); unlock(); window.scrollTo(0,0); };
   if(!KIT_FORM_ID){ done(); return; }
   var fd=new FormData(); fd.append('email_address',email); if(name) fd.append('fields[first_name]',name);
   fetch('https://app.kit.com/forms/'+encodeURIComponent(KIT_FORM_ID)+'/subscriptions',{method:'POST',body:fd,mode:'no-cors'})
@@ -717,18 +720,26 @@ $('barrierIdeas').addEventListener('click',function(e){
   S.story.barriers[i]=c.dataset.barrier; fill($('p-story')); save();
 });
 /* ---------- step 1: people ---------- */
-function who(i){ return S.plan.people.length>1 ? (i===0?'You':'Spouse / partner') : 'You'; }
+function who(i){ var p=S.plan.people[i]; var n=p&&p.name&&p.name.trim(); return n || (i===0?'You':'Income '+(i+1)); }
+function whose(i){ return S.plan.people.length>1 ? who(i)+'\'s' : 'your'; } // "Melissa's" / "your"
 function renderPeople(){
   $('people').innerHTML=S.plan.people.map(function(p,i){
-    return '<div class="prow"><span class="who">'+who(i)+'</span><div class="money"><input type="text" inputmode="decimal" data-p="plan.people.'+i+'.gross" aria-label="'+who(i)+' gross income per year" placeholder="Per year"></div>'+
-      (i>0?'<button class="x" id="rmSpouse" aria-label="Remove spouse">×</button>':'<span></span>')+'</div>';
+    return '<div class="prow"><input type="text" data-p="plan.people.'+i+'.name" data-rename placeholder="'+(i===0?'Your name':'Name or source')+'" aria-label="Name or source of income '+(i+1)+'">'+
+      '<div class="money"><input type="text" inputmode="decimal" data-p="plan.people.'+i+'.gross" aria-label="Income '+(i+1)+' per year" placeholder="Per year"></div>'+
+      (i>0?'<button class="x" data-rmperson="'+i+'" aria-label="Remove this income">×</button>':'<span></span>')+'</div>';
   }).join('');
-  $('addSpouse').hidden=S.plan.people.length>1;
   fill($('people'));
 }
-$('addSpouse').addEventListener('click',function(){ S.plan.people.push({gross:''}); save(); renderPeople(); renderAccts(); recalc(); });
-$('people').addEventListener('click',function(e){ if(e.target.id!=='rmSpouse') return;
-  S.plan.people.splice(1); S.plan.accts.forEach(function(a){a.owner=0;}); save(); renderPeople(); renderAccts(); recalc(); });
+$('addSpouse').addEventListener('click',function(){ S.plan.people.push({name:'',gross:''}); save(); renderPeople(); renderAccts(); recalc();
+  var r=document.querySelectorAll('#people .prow'); r[r.length-1].querySelector('input').focus(); });
+$('people').addEventListener('click',function(e){ var b=e.target.closest('[data-rmperson]'); if(!b) return; var k=+b.dataset.rmperson;
+  S.plan.people.splice(k,1);
+  S.plan.accts.forEach(function(a){ var o=+a.owner||0; a.owner = o===k ? 0 : (o>k ? o-1 : o); });
+  save(); renderPeople(); renderAccts(); recalc(); });
+// keep the "Whose?" dropdowns in step 2 in sync as names are typed
+$('people').addEventListener('input',function(e){ if(!e.target.matches('[data-rename]')) return;
+  setTimeout(function(){ // run after the new name is saved
+    document.querySelectorAll('#accts select[data-owner]').forEach(function(s){ [].forEach.call(s.options,function(o,i){ o.textContent=who(i); }); }); },0); });
 
 /* ---------- step 2: accounts ---------- */
 function blankAcct(t){ return {type:t,owner:0,name:'',bal:'',amt:'',per:t==='hsa'?'yr':'mo',pct:'',cmode:'pct',match:'',emode:'pct',need:'',payroll:t==='hsa'}; }
@@ -745,7 +756,7 @@ function renderAccts(){
   $('accts').innerHTML=S.plan.accts.map(function(a,i){
     var T=ACCT[a.type]||ACCT.other, p='plan.accts.'+i+'.';
     var head='<div class="ah"><b>'+(T.named?'<input type="text" data-p="'+p+'name" placeholder="'+T.label+'" aria-label="Account name" style="min-height:36px;padding:4px 10px;font-weight:600;max-width:220px">':T.label)+'</b><span style="display:flex;gap:8px;align-items:center">'+
-      (two&&T.owner?'<select data-p="'+p+'owner" aria-label="Whose account"><option value="0">Yours</option><option value="1">Spouse\'s</option></select>':'')+
+      (two&&T.owner?'<select data-p="'+p+'owner" data-owner aria-label="Whose account">'+S.plan.people.map(function(x,k){return '<option value="'+k+'">'+esc(who(k))+'</option>';}).join('')+'</select>':'')+
       '<button class="x" data-rmacct="'+i+'" aria-label="Remove '+T.label+'">×</button></span></div>';
     var body;
     if(a.type==='work'){
@@ -797,7 +808,7 @@ function suggestions(){
   var s=[], m=efMonths(), r=retRate(), hd=highDebts();
   var efGoal=function(months){ var target=expTotal()*months, more=target-efBal(); return efBal()>0 ? 'Add '+fmt(more)+' to my emergency fund to reach '+(months===GUIDE.efStarter?'a starter cushion':months+' months')+' ('+fmt(target)+')' : 'Save '+fmt(target)+' as '+(months===GUIDE.efStarter?'a starter emergency fund':'a '+months+'-month emergency fund'); };
   if(m!==null&&m<GUIDE.efStarter) s.push(efGoal(GUIDE.efStarter));
-  matchGaps().forEach(function(a){ s.push('Raise '+(S.plan.people.length>1&&+a.owner===1?'my spouse\'s':'my')+' 401(k) from '+(Math.round(workPct(a)*10)/10)+'% to '+num(a.need)+'% of pay to get the full match'); });
+  matchGaps().forEach(function(a){ s.push('Raise '+((+a.owner||0)>0?who(+a.owner)+'\'s':'my')+' 401(k) from '+(Math.round(workPct(a)*10)/10)+'% to '+num(a.need)+'% of pay to get the full match'); });
   if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
   if(m!==null&&m>=GUIDE.efStarter&&m<GUIDE.efMin) s.push(efGoal(GUIDE.efMin));
   if(!hasRetireAcct()) s.push('Open a Roth IRA and set up an automatic monthly contribution');
@@ -867,14 +878,14 @@ function orderItems(){
 }
 function recalc(){
   var g=grossTotal(), rr=retRate();
-  $('o-gross').innerHTML = S.plan.people.length>1&&g>0 ? 'Household gross income: <b>'+fmt(g)+'</b> a year.' : '';
+  $('o-gross').innerHTML = S.plan.people.length>1&&g>0 ? 'Total gross income: <b>'+fmt(g)+'</b> a year.' : '';
   // per-card 401(k) math
   S.plan.accts.forEach(function(a,i){ if(a.type!=='work') return; var el=$('wc'+i); if(!el) return;
     var usesPct=(a.cmode||'pct')==='pct'||(a.emode||'pct')==='pct';
-    if(!ownerGross(a)&&usesPct&&(num(a.pct)||num(a.match))){ el.textContent='Add '+(S.plan.people.length>1&&+a.owner===1?'your spouse\'s':'your')+' income in step 1 to see the dollar amounts.'; return; }
+    if(!ownerGross(a)&&usesPct&&(num(a.pct)||num(a.match))){ el.textContent='Add '+whose(+a.owner||0)+' income in step 1 to see the dollar amounts.'; return; }
     var gap=matchGaps().indexOf(a)>=0, you=workYou(a), er=workEmployer(a);
     if(!you&&!er){ el.innerHTML=''; return; }
-    el.innerHTML='That\'s about <b>'+fmt(you)+'</b>/yr from '+(+a.owner===1&&S.plan.people.length>1?'your spouse':'you')+(er?' + <b>'+fmt(er)+'</b>/yr from the employer':'')+'.'+
+    el.innerHTML='That\'s about <b>'+fmt(you)+'</b>/yr from '+(S.plan.people.length>1?esc(who(+a.owner||0)):'you')+(er?' + <b>'+fmt(er)+'</b>/yr from the employer':'')+'.'+
       (gap?' '+pill('warn','Missing part of the match'):(matchApplies(a)?' '+pill('ok','Getting the full match'):''));
   });
   // retirement guideline
@@ -1035,6 +1046,7 @@ $('igLink').href=INSTAGRAM_URL;
 /* ---------- init ---------- */
 document.querySelectorAll('#p-story .step>.badge').forEach(function(b){b.setAttribute('data-of','3');});
 document.querySelectorAll('#p-plan .step>.badge').forEach(function(b){b.setAttribute('data-of','8');});
+if(S.name&&!S.plan.people[0].name) S.plan.people[0].name=S.name;
 renderPeople(); renderAccts(); fill(); recalc(); go(S.tab||'story'); ready=true;
 })();
 </script>
