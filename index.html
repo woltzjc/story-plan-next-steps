@@ -131,6 +131,28 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
 .pill.ok{background:var(--success-soft);color:var(--success)}
 .pill.warn{background:var(--warning-soft);color:var(--warning)}
 .order{margin:10px 0 0;padding-left:20px}
+.pill.n{background:var(--surface-soft);color:var(--ink-muted)}
+.tip{background:var(--surface-soft);border-radius:8px;padding:10px 14px;font-size:14px;line-height:21px;margin-top:10px}
+.tip b{font-weight:700}
+.tag{display:inline-block;margin-left:6px;padding:0 8px;border-radius:4px;background:var(--warning-soft);color:var(--warning);font-size:12px;font-weight:700;line-height:20px}
+.note{margin-top:10px;font-size:15px}
+.note .pill{margin-left:6px;vertical-align:1px}
+details.card summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:'+';font-size:22px;color:var(--ink-muted)}
+details.card[open] summary::after{content:'–'}
+details.card ul{margin:12px 0 4px;padding-left:20px}
+.ex{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+.ex>div{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:var(--bg)}
+.ex .k{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--ink-muted);margin-bottom:4px}
+.ex ol{margin:2px 0 8px;padding-left:18px;font-size:14px;line-height:21px}
+@media (max-width:620px){.ex{grid-template-columns:1fr}}
+.orderlist{list-style:none;margin:10px 0 0;padding:0}
+.orderlist li{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.orderlist li:first-child{border-top:0}
+.orderlist .on{width:26px;height:26px;border-radius:99px;background:var(--surface-soft);font-size:13px;font-weight:700;display:grid;place-items:center}
+.orderlist .d{font-size:13px;line-height:19px;color:var(--ink-muted)}
+.focus{margin-top:12px;padding:12px 14px;border-left:3px solid var(--accent);background:var(--surface);font-size:15px}
 
 /* next steps */
 .ns{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start}
@@ -222,6 +244,28 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <p class="lead">What is the story you want your life to tell? This should guide every money decision you make from here.</p>
       <div class="rule"></div>
 
+      <details class="card" open>
+        <summary>Before you start: what you'll need</summary>
+        <ul class="small">
+          <li>A recent pay stub</li>
+          <li>Your last 2–3 months of bank and credit card statements</li>
+          <li>Balances for your savings, retirement, and investment accounts</li>
+          <li>Statements for any debts (balance, interest rate, minimum payment)</li>
+        </ul>
+        <p class="small muted" style="margin:8px 0 0">Share finances with a spouse? Fill this out together. Rough numbers are fine to start. Everything saves on this device, so you can come back and fine-tune.</p>
+      </details>
+
+      <details class="card">
+        <summary>See an example</summary>
+        <p class="small muted" style="margin:8px 0 0">Here's what Jeremy's framework looks like.</p>
+        <div class="ex">
+          <div><div class="k">STORY</div><ol><li>Memories</li><li>Experiences</li><li>Generosity</li></ol>
+            <div class="k">BARRIERS</div><ol><li>Income too low</li><li>Permission to enjoy life now</li><li>Not enough set aside for retirement</li></ol></div>
+          <div><div class="k">PLAN</div><ol><li>Save $X/year for retirement</li><li>Save $X/year for memories &amp; experiences</li><li>Give $X/month for generosity</li></ol></div>
+          <div><div class="k">NEXT STEPS</div><ol><li>Max out at least one Roth a year</li><li>Put $1k/month into a brokerage account for memories, experiences, and the emergency fund</li><li>Plan Italy 2028!</li></ol></div>
+        </div>
+      </details>
+
       <div class="card">
         <div class="step"><div class="badge">1</div><div style="flex:1">
           <h3>Name three themes</h3>
@@ -232,6 +276,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
             <input type="text" data-p="story.themes.2" placeholder="Theme 3" aria-label="Theme 3">
           </div>
           <div class="chips" id="themeIdeas"></div>
+          <div class="tip"><b>Stuck?</b> Try these: When you're 80 and looking back, what would you regret not doing? When do you feel most like yourself? What do you want the people you love to remember about you?</div>
         </div></div>
       </div>
 
@@ -244,6 +289,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
             <input type="text" data-p="story.barriers.1" placeholder="Barrier 2" aria-label="Barrier 2">
             <input type="text" data-p="story.barriers.2" placeholder="Barrier 3" aria-label="Barrier 3">
           </div>
+          <div class="chips" id="barrierIdeas"></div>
         </div></div>
       </div>
 
@@ -265,6 +311,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <div class="label">Part 2</div>
       <h2>Your story decides your <em class="s">plan.</em></h2>
       <p class="lead">Eight simple steps. Rough numbers are fine. You can always come back and fine-tune them.</p>
+      <p class="small muted">Along the way you'll see a few common rules of thumb. They're general guidelines to help you get your bearings, not personal advice.</p>
       <div class="rule"></div>
 
       <div class="card"><div class="step"><div class="badge">1</div><div style="flex:1">
@@ -273,15 +320,16 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
           <div><label class="f" for="pGross">Gross income (per year)</label><div class="money"><input type="text" inputmode="decimal" id="pGross" data-p="plan.gross"></div><div class="help">Before taxes. Include your spouse's if you share finances.</div></div>
           <div><label class="f" for="pRet">Retirement contributions (per year)</label><div class="money"><input type="text" inputmode="decimal" id="pRet" data-p="plan.retire"></div><div class="help">What you put into 401(k)s, IRAs, etc. Include an employer match if you have one.</div></div>
         </div>
-        <p class="mt small" id="o-rate"></p>
+        <div id="o-rate"></div>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">2</div><div style="flex:1">
         <h3>Investment and emergency fund balances</h3>
-        <p class="muted small">What you have, and what you add each month.</p>
+        <p class="muted small">What you have, and what you add each month. “Monthly” includes paycheck deductions, like a 401(k). Keep the name “Emergency fund” on your emergency savings so the tool can check it.</p>
         <div class="rows" data-list="plan.accounts"></div>
         <button class="btn quiet" data-add="plan.accounts">+ Add an account</button>
         <p class="small mt" id="o-accts"></p>
+        <div id="o-ef"></div>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">3</div><div style="flex:1">
@@ -303,12 +351,18 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <p class="muted small">Look at the last few months of bank and card statements. Most people guess low.</p>
         <div class="rows" data-list="plan.expenses"></div>
         <button class="btn quiet" data-add="plan.expenses">+ Add an expense</button>
+        <div class="mt">
+          <label class="f" for="pXfer">Savings you already move from your bank account each month</label>
+          <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pXfer" data-p="plan.saveXfer"></div>
+          <div class="help">Transfers to savings or investments that come out of your take-home pay. Don't include paycheck deductions like a 401(k); those never reach your bank account.</div>
+          <div class="chips" id="xferChips"></div>
+        </div>
         <div class="mt" id="o-exp"></div>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">6</div><div style="flex:1">
         <h3>A little extra margin for the unexpected</h3>
-        <p class="muted small">Life happens. Set aside a cushion each month so a surprise doesn't derail the plan.</p>
+        <p class="muted small">Life happens: car repairs, doctor visits, birthdays you forgot about. Set aside a cushion each month so a surprise doesn't derail the plan. Many people use 5–10% of their monthly expenses.</p>
         <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pMargin" data-p="plan.margin" aria-label="Monthly margin"></div>
         <div class="chips" id="marginChips"></div>
       </div></div></div>
@@ -322,9 +376,11 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <div class="card"><div class="step"><div class="badge">8</div><div style="flex:1">
         <h3>Use your story to decide how to <em class="s">use</em> it</h3>
         <p class="muted small">Not spend. <b>Use.</b> Give every dollar a job that points back to your three themes.</p>
-        <div class="rows" data-list="plan.uses"></div>
+        <div class="tip" id="o-order"></div>
+        <div class="rows mt" data-list="plan.uses"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn quiet" data-add="plan.uses">+ Add a use</button>
+          <button class="btn quiet" id="suggestUses">+ Add suggested uses</button>
           <button class="btn quiet" id="seedUses">+ Add my story themes</button>
         </div>
         <div class="mt" id="o-uses"></div>
@@ -343,7 +399,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <div class="card">
         <h3>Ideas to get you started</h3>
         <p class="muted small">Tap one to add it, then make it yours. Your steps will look different from anyone else's, based on your story and your plan.</p>
-        <div class="chips" id="stepIdeas"></div>
+        <div id="stepIdeas"></div>
+        <div class="tip"><b>Make it clear:</b> say what, how much, and when. For example, “Move $200 to savings every payday, starting Dec 1.”</div>
       </div>
       <div id="nsList"></div>
       <div class="card" id="doneCard" hidden>
@@ -426,6 +483,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
 /* ====== SETTINGS: fill these in ====== */
 var KIT_FORM_ID = '10186716';    // Kit form "Story Plan Next Steps Tool". Empty = test mode (no email is sent).
 var INSTAGRAM_URL = 'https://ig.me/m/pastor_turned_planner'; // opens a DM; profile: https://www.instagram.com/pastor_turned_planner/
+// Rules of thumb shown in the tool (general guidelines). Change these numbers to change them everywhere.
+var GUIDE = { efStarter:1, efMin:3, efMax:6, retireTarget:15, highRate:8 };
 /* ===================================== */
 
 var KEY = 'ptp-spn-v1';
@@ -437,7 +496,7 @@ var DEFAULT = {
     debts:[{name:'',bal:'',rate:'',min:''}],
     takeHome:'',
     expenses:[{name:'Housing',amt:''},{name:'Utilities',amt:''},{name:'Groceries',amt:''},{name:'Transportation',amt:''},{name:'Insurance',amt:''},{name:'Kids / childcare',amt:''},{name:'Subscriptions',amt:''},{name:'Everything else',amt:''}],
-    margin:'', uses:[]},
+    margin:'', saveXfer:'', uses:[]},
   next:[{text:'',theme:'',done:false},{text:'',theme:'',done:false},{text:'',theme:'',done:false}],
   done:[],
   ret:{age:'38', retireAge:'65', savings:'50000', monthly:'750', rate:'6', inc:'0', wd:'4'},
@@ -450,6 +509,7 @@ var LISTS = {
   'plan.uses':{cls:'cols-use', blank:{name:'',amt:''}, cols:[['name','Use','text'],['amt','Per month','money']]}
 };
 var THEME_IDEAS = ['Memories','Experiences','Generosity','Family','Faith','Freedom','Adventure','Health','Rest','Security','Legacy','Community','Travel','Margin'];
+var BARRIER_IDEAS = ['Income too low','Too much debt','Not enough time','Permission to enjoy life now','Not on the same page with my spouse','Not sure where to start','Not enough saved for retirement'];
 var STEP_IDEAS = ['Start a budget','Trim expenses or raise income','Pay off debt, highest interest rate first','Build a 3–6 month emergency fund','Open a brokerage account','Invest a set amount from every paycheck'];
 
 var S = load();
@@ -536,11 +596,42 @@ $('themeIdeas').addEventListener('click',function(e){
   var i=S.story.themes.findIndex(function(t){return !t.trim();}); if(i<0) i=2;
   S.story.themes[i]=c.dataset.theme; fill($('p-story')); save(); themeSelects();
 });
+$('barrierIdeas').innerHTML=BARRIER_IDEAS.map(function(t){return '<button class="chip" data-barrier="'+esc(t)+'">'+esc(t)+'</button>';}).join('');
+$('barrierIdeas').addEventListener('click',function(e){
+  var c=e.target.closest('[data-barrier]'); if(!c) return;
+  var i=S.story.barriers.findIndex(function(t){return !t.trim();}); if(i<0) i=2;
+  S.story.barriers[i]=c.dataset.barrier; fill($('p-story')); save();
+});
+function xferChips(){
+  var a=nonRetireAdds();
+  $('xferChips').innerHTML = a>0 ? '<button class="chip" data-x="'+Math.round(a)+'">Use '+fmt(a)+' from step 2 (non-retirement accounts)</button>' : '';
+}
+$('xferChips').addEventListener('click',function(e){var c=e.target.closest('[data-x]');if(!c)return;S.plan.saveXfer=c.dataset.x;$('pXfer').value=c.dataset.x;save();recalc();});
 function marginChips(){
   var exp=expTotal();
   $('marginChips').innerHTML=[5,10].map(function(p){return '<button class="chip" data-m="'+Math.round(exp*p/100)+'">'+p+'% of expenses ('+fmt(exp*p/100)+')</button>';}).join('');
 }
 $('marginChips').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;S.plan.margin=c.dataset.m;$('pMargin').value=c.dataset.m;save();recalc();});
+$('suggestUses').addEventListener('click',function(){
+  var m=efMonths(), r=retRate(), hd=highDebts(), add=[];
+  if(hd.length) add.push('Extra payment: '+(hd[0].name||'highest-rate debt'));
+  if(m===null||m<GUIDE.efMin) add.push('Emergency fund');
+  if(r===null||r<GUIDE.retireTarget) add.push('Retirement');
+  S.story.themes.filter(function(t){return t.trim();}).forEach(function(t){add.push(t);});
+  add.forEach(function(n){ if(!S.plan.uses.some(function(u){return u.name===n;})) S.plan.uses.push({name:n,amt:''}); });
+  renderList('plan.uses'); save(); recalc();
+});
+function suggestions(){
+  var s=[], m=efMonths(), r=retRate(), hd=highDebts();
+  if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
+  if(m!==null&&m<GUIDE.efStarter) s.push('Save '+fmt(expTotal()*GUIDE.efStarter)+' as a starter emergency fund');
+  else if(m!==null&&m<GUIDE.efMin) s.push('Build my emergency fund to '+GUIDE.efMin+' months ('+fmt(expTotal()*GUIDE.efMin)+')');
+  if(r!==null&&r<GUIDE.retireTarget) s.push('Raise my retirement contribution by 1% of my pay');
+  if(r!==null&&r<GUIDE.retireTarget) s.push('Make sure I\'m getting my full employer match');
+  var t=S.story.themes.filter(function(x){return x.trim();})[0];
+  if(t) s.push('Open a separate savings account for '+t.toLowerCase()+' and automate it each payday');
+  return s;
+}
 $('seedUses').addEventListener('click',function(){
   S.story.themes.filter(function(t){return t.trim();}).forEach(function(t){
     if(!S.plan.uses.some(function(u){return u.name===t;})) S.plan.uses.push({name:t,amt:''});
@@ -552,26 +643,64 @@ $('seedUses').addEventListener('click',function(){
 /* ---------- plan math ---------- */
 function debtMin(){return sum(S.plan.debts,'min');}
 function expTotal(){return sum(S.plan.expenses,'amt')+debtMin();}
-function leftover(){return num(S.plan.takeHome)-expTotal()-num(S.plan.margin);}
+function leftover(){return num(S.plan.takeHome)-expTotal()-num(S.plan.saveXfer)-num(S.plan.margin);}
+function efBal(){return S.plan.accounts.filter(function(a){return /emergency/i.test(a.name);}).reduce(function(t,a){return t+num(a.bal);},0);}
+function hasEF(){return S.plan.accounts.some(function(a){return /emergency/i.test(a.name);});}
+function efMonths(){var e=expTotal(); return (e>0&&hasEF())?efBal()/e:null;}
+function retRate(){var g=num(S.plan.gross); return g>0?num(S.plan.retire)/g*100:null;}
+function highDebts(){return S.plan.debts.filter(function(d){return num(d.rate)>=GUIDE.highRate&&(num(d.bal)>0||d.name.trim());}).sort(function(a,b){return num(b.rate)-num(a.rate);});}
+function nonRetireAdds(){return S.plan.accounts.filter(function(a){return !/retire|401|403|457|ira|roth|tsp|pension/i.test(a.name);}).reduce(function(t,a){return t+num(a.add);},0);}
+function pill(cls,txt){return '<span class="pill '+cls+'">'+txt+'</span>';}
+function mo(m){return m.toFixed(1)+' month'+(m.toFixed(1)==='1.0'?'':'s');}
+function orderItems(){
+  var m=efMonths(), r=retRate(), hd=highDebts();
+  return [
+    {t:'Starter emergency fund, plus any employer match', d:'About '+GUIDE.efStarter+' month of expenses set aside. If your employer matches retirement contributions, put in enough to get the full match.',
+      s: m===null?'n':(m>=GUIDE.efStarter?'ok':'warn'), l: m===null?'Fill in steps 2 & 5':(m>=GUIDE.efStarter?'Done':'Start here')},
+    {t:'Pay off high-interest debt ('+GUIDE.highRate+'%+)', d:'Highest rate first. These usually cost more than you would give up by pausing extra investing.',
+      s: hd.length?'warn':'ok', l: hd.length?hd.length+' to go':'None'},
+    {t:'Build your emergency fund to '+GUIDE.efMin+'–'+GUIDE.efMax+' months', d:'So one surprise doesn\'t turn into new debt.',
+      s: m===null?'n':(m>=GUIDE.efMin?'ok':'warn'), l: m===null?'Fill in steps 2 & 5':(m>=GUIDE.efMin?'Done':mo(m)+' now')},
+    {t:'Work toward '+GUIDE.retireTarget+'% of gross income for retirement', d:'Including any employer match.',
+      s: r===null?'n':(r>=GUIDE.retireTarget?'ok':'warn'), l: r===null?'Fill in step 1':r.toFixed(1)+'% now'},
+    {t:'Fund your story goals all along the way', d:'Memories, experiences, generosity. You don\'t have to wait until everything else is done. Give them a slice every month.',
+      s:'ok', l:'Always'}
+  ];
+}
 function recalc(){
-  var g=num(S.plan.gross), r=num(S.plan.retire);
-  $('o-rate').innerHTML = g>0 ? 'You\'re putting <b>'+(r/g*100).toFixed(1)+'%</b> of your gross income toward retirement.' : '';
+  var g=num(S.plan.gross), r=num(S.plan.retire), rr=retRate();
+  $('o-rate').innerHTML = g>0 ? '<p class="note">You\'re putting <b>'+rr.toFixed(1)+'%</b> of your gross income toward retirement.'+
+      (rr>=GUIDE.retireTarget?pill('ok','At or above '+GUIDE.retireTarget+'%'):pill('warn','Below '+GUIDE.retireTarget+'%'))+'</p>'+
+      '<div class="tip"><b>Rule of thumb:</b> many people aim to save about '+GUIDE.retireTarget+'% of gross income for retirement, including any employer match. If you\'re not there yet, that\'s okay. Your plan will show you how to work toward it.</div>' : '';
+  var m=efMonths();
+  if(!hasEF()) $('o-ef').innerHTML='<div class="tip">Add an account named “Emergency fund” to see how many months of expenses it covers.</div>';
+  else if(expTotal()<=0) $('o-ef').innerHTML='<div class="tip">Fill in your monthly expenses in step 5 and you\'ll see how many months your emergency fund covers.</div>';
+  else $('o-ef').innerHTML='<p class="note">Your emergency fund covers <b>'+mo(m)+'</b> of expenses.'+
+      (m>=GUIDE.efMin?pill('ok','Within the '+GUIDE.efMin+'–'+GUIDE.efMax+' month range'+(m>GUIDE.efMax?' (and then some)':'')):m>=GUIDE.efStarter?pill('warn','Starter cushion in place'):pill('warn','Under '+GUIDE.efStarter+' month'))+'</p>'+
+      '<div class="tip"><b>Rule of thumb:</b> keep '+GUIDE.efMin+'–'+GUIDE.efMax+' months of expenses in an emergency fund before investing beyond an employer match. That\'s '+fmt(expTotal()*GUIDE.efMin)+'–'+fmt(expTotal()*GUIDE.efMax)+' for you.</div>';
   var a=S.plan.accounts;
   $('o-accts').innerHTML = a.length ? 'Total: <b>'+fmt(sum(a,'bal'))+'</b> saved, <b>'+fmt(sum(a,'add'))+'</b> added each month.' : '';
   var ds=S.plan.debts.filter(function(d){return d.name.trim()||num(d.bal);});
   if(ds.length){
     var sorted=ds.slice().sort(function(x,y){return num(y.rate)-num(x.rate);});
-    $('o-debts').innerHTML='Total owed: <b>'+fmt(sum(ds,'bal'))+'</b>. Highest rate first:<ol class="order">'+sorted.map(function(d){return '<li>'+esc(d.name||'Debt')+' — '+num(d.rate)+'% ('+fmt(num(d.bal))+')</li>';}).join('')+'</ol>';
+    var nh=highDebts().length;
+    $('o-debts').innerHTML='Total owed: <b>'+fmt(sum(ds,'bal'))+'</b>. Highest rate first:<ol class="order">'+sorted.map(function(d){return '<li>'+esc(d.name||'Debt')+' — '+num(d.rate)+'% ('+fmt(num(d.bal))+')'+(num(d.rate)>=GUIDE.highRate?'<span class="tag">High interest</span>':'')+'</li>';}).join('')+'</ol>'+
+      '<div class="tip"><b>Rule of thumb:</b> debts at '+GUIDE.highRate+'% or higher are generally worth paying down before investing beyond an employer match, highest rate first.'+(nh?' You have '+nh+'.':'')+'</div>';
   } else $('o-debts').innerHTML='';
   var dm=debtMin(), et=expTotal(), th=num(S.plan.takeHome);
   $('o-exp').innerHTML='<div class="stat"><span>Expenses above</span><b>'+fmt(sum(S.plan.expenses,'amt'))+'</b></div>'+
     '<div class="stat"><span>Debt minimum payments (from step 3)</span><b>'+fmt(dm)+'</b></div>'+
     '<div class="stat"><span>Total monthly expenses</span><b>'+fmt(et)+'</b></div>'+
-    '<div class="stat"><span>Take-home minus expenses</span><b>'+fmt(th-et)+'</b></div>';
-  marginChips();
+    '<div class="stat"><span>Savings you already move each month</span><b>'+fmt(num(S.plan.saveXfer))+'</b></div>'+
+    '<div class="stat"><span>Take-home minus expenses and savings</span><b>'+fmt(th-et-num(S.plan.saveXfer))+'</b></div>';
+  marginChips(); xferChips();
   var L=leftover();
   $('o-left').textContent=fmt(L);
-  $('o-leftmath').textContent=fmt(th)+' take-home − '+fmt(et)+' expenses − '+fmt(num(S.plan.margin))+' margin';
+  $('o-leftmath').textContent=fmt(th)+' take-home − '+fmt(et)+' expenses − '+fmt(num(S.plan.saveXfer))+' savings already happening − '+fmt(num(S.plan.margin))+' margin';
+  var items=orderItems(), focus=items.filter(function(i){return i.s==='warn';})[0];
+  $('o-order').innerHTML='<b>A common order of priorities</b> (general guidelines, not personal advice):<ol class="orderlist">'+
+    items.map(function(it,i){return '<li><span class="on">'+(i+1)+'</span><div><div style="font-weight:600">'+it.t+'</div><div class="d">'+it.d+'</div></div>'+pill(it.s,it.l)+'</li>';}).join('')+'</ol>'+
+    (focus?'<div class="focus">Based on your numbers, a good focus right now: <b>'+focus.t.charAt(0).toLowerCase()+focus.t.slice(1)+'</b>, while still giving your story goals a slice.</div>':'');
   var u=sum(S.plan.uses,'amt'), rem=L-u;
   $('o-uses').innerHTML = S.plan.uses.length ? '<div class="stat"><span>Given a job</span><b>'+fmt(u)+'</b></div><div class="stat"><span>Still to assign</span><b>'+fmt(rem)+'</b></div>'+
     (Math.round(rem)===0&&L>0?'<span class="pill ok">Every dollar has a job</span>':rem<0?'<span class="pill warn">That\'s '+fmt(-rem)+' more than you have left</span>':'') : '';
@@ -585,11 +714,12 @@ function themeOpts(sel){
 }
 function themeSelects(){ document.querySelectorAll('select[data-ns]').forEach(function(s){ s.innerHTML=themeOpts(S.next[+s.dataset.ns].theme); }); }
 function renderNext(){
-  $('stepIdeas').innerHTML=STEP_IDEAS.map(function(t){return '<button class="chip" data-idea="'+esc(t)+'">'+esc(t)+'</button>';}).join('');
+  var sg=suggestions(), chips=function(a){return '<div class="chips">'+a.map(function(t){return '<button class="chip" data-idea="'+esc(t)+'">'+esc(t)+'</button>';}).join('')+'</div>';};
+  $('stepIdeas').innerHTML=(sg.length?'<div class="label" style="margin-top:14px">Suggested from your plan</div>'+chips(sg)+'<div class="label" style="margin-top:14px">More ideas</div>':'')+chips(STEP_IDEAS);
   $('nsList').innerHTML=S.next.map(function(n,i){
     return '<div class="card"><div class="ns"><div class="badge">'+(i+1)+'</div><div>'+
       '<label class="f" for="ns'+i+'">Next step '+(i+1)+(i>0?' <span class="muted" style="font-weight:400">(optional)</span>':'')+'</label>'+
-      '<textarea id="ns'+i+'" data-p="next.'+i+'.text" rows="2" placeholder="Simple, attainable, clear"></textarea>'+
+      '<textarea id="ns'+i+'" data-p="next.'+i+'.text" rows="2" placeholder="What, how much, and when"></textarea>'+
       '<div class="meta"><select data-ns="'+i+'" aria-label="Which theme it connects to">'+themeOpts(n.theme)+'</select>'+
       '<label class="check"><input type="checkbox" data-done="'+i+'"'+(n.done?' checked':'')+'> Done</label></div>'+
       (n.done?'<div class="donebox"><span>Nice work. What\'s your next step?</span><button class="btn secondary" data-replace="'+i+'">Replace it</button></div>':'')+
@@ -666,10 +796,12 @@ function renderSummary(){
   var uses=p.uses.filter(function(u){return u.name.trim()||num(u.amt);});
   var plan='<div class="stat"><span>Take-home pay</span><b>'+fmt(num(p.takeHome))+'/mo</b></div>'+
     '<div class="stat"><span>Expenses</span><b>'+fmt(expTotal())+'/mo</b></div>'+
+    (num(p.saveXfer)?'<div class="stat"><span>Savings already happening</span><b>'+fmt(num(p.saveXfer))+'/mo</b></div>':'')+
     '<div class="stat"><span>Margin for the unexpected</span><b>'+fmt(num(p.margin))+'/mo</b></div>'+
     '<div class="stat"><span>Left to use</span><b>'+fmt(L)+'/mo</b></div>'+
     '<div class="sub mt">How I\'ll use it</div>'+(uses.length?'<ol>'+uses.map(function(u){return '<li>'+esc(u.name||'Unnamed')+': <b>'+fmt(num(u.amt))+'/mo</b></li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>')+
-    (num(p.gross)?'<p class="small muted">Retirement savings rate: '+(num(p.retire)/num(p.gross)*100).toFixed(1)+'% of gross income</p>':'');
+    (num(p.gross)?'<p class="small muted" style="margin:0">Retirement savings rate: '+(num(p.retire)/num(p.gross)*100).toFixed(1)+'% of gross income (guideline: '+GUIDE.retireTarget+'%)</p>':'')+
+    (efMonths()!==null?'<p class="small muted">Emergency fund: '+mo(efMonths())+' of expenses (guideline: '+GUIDE.efMin+'–'+GUIDE.efMax+')</p>':'');
   var nx=S.next.filter(function(n){return n.text.trim();});
   var next=nx.length?'<ol>'+nx.map(function(n){return '<li>'+esc(n.text)+(n.theme?' <span class="muted small">('+esc(n.theme)+')</span>':'')+(n.done?' ✓':'')+'</li>';}).join('')+'</ol>':'<p class="empty">Not filled in yet</p>';
   $('fw').innerHTML='<div class="fwbox"><div class="t">STORY</div><div class="b">'+story+'</div></div><div class="conn"></div>'+
