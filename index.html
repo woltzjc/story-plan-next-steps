@@ -118,6 +118,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
   .grid2,.grid3{grid-template-columns:1fr}
   .cols-acct{grid-template-columns:1fr 1fr 36px}.cols-acct>:first-child{grid-column:1/-1}
   .cols-debt{grid-template-columns:1fr .7fr 1fr 36px}.cols-debt>:first-child{grid-column:1/-1}
+  .cols-exp{grid-template-columns:1fr 112px 36px}
+  .cols-use{grid-template-columns:1fr 36px}.cols-use>:first-child{grid-column:1/-1}
+  .rows .row.cols-use{margin-bottom:14px}
   .rows .hdr{display:none}
 }
 
@@ -783,20 +786,20 @@ function marginChips(){
 $('marginChips').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;S.plan.margin=c.dataset.m;$('pMargin').value=c.dataset.m;save();recalc();});
 $('suggestUses').addEventListener('click',function(){
   var m=efMonths(), r=retRate(), hd=highDebts(), add=[];
-  if(matchGaps().length) add.push('Raise 401(k) to get the full match');
   if(hd.length) add.push('Extra payment: '+(hd[0].name||'highest-rate debt'));
   if(m===null||m<GUIDE.efMin) add.push('Emergency fund');
-  if(r===null||r<GUIDE.retireTarget) add.push('Retirement');
+  if(r===null||r<GUIDE.retireTarget) add.push('Retirement (IRA or extra savings)');
   S.story.themes.filter(function(t){return t.trim();}).forEach(function(t){add.push(t);});
   add.forEach(function(n){ if(!S.plan.uses.some(function(u){return u.name===n;})) S.plan.uses.push({name:n,amt:''}); });
   renderList('plan.uses'); save(); recalc();
 });
 function suggestions(){
   var s=[], m=efMonths(), r=retRate(), hd=highDebts();
-  if(m!==null&&m<GUIDE.efStarter) s.push('Save '+fmt(expTotal()*GUIDE.efStarter)+' as a starter emergency fund');
+  var efGoal=function(months){ var target=expTotal()*months, more=target-efBal(); return efBal()>0 ? 'Add '+fmt(more)+' to my emergency fund to reach '+(months===GUIDE.efStarter?'a starter cushion':months+' months')+' ('+fmt(target)+')' : 'Save '+fmt(target)+' as '+(months===GUIDE.efStarter?'a starter emergency fund':'a '+months+'-month emergency fund'); };
+  if(m!==null&&m<GUIDE.efStarter) s.push(efGoal(GUIDE.efStarter));
   matchGaps().forEach(function(a){ s.push('Raise '+(S.plan.people.length>1&&+a.owner===1?'my spouse\'s':'my')+' 401(k) from '+(Math.round(workPct(a)*10)/10)+'% to '+num(a.need)+'% of pay to get the full match'); });
   if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
-  if(m!==null&&m>=GUIDE.efStarter&&m<GUIDE.efMin) s.push('Build my emergency fund to '+GUIDE.efMin+' months ('+fmt(expTotal()*GUIDE.efMin)+')');
+  if(m!==null&&m>=GUIDE.efStarter&&m<GUIDE.efMin) s.push(efGoal(GUIDE.efMin));
   if(!hasRetireAcct()) s.push('Open a Roth IRA and set up an automatic monthly contribution');
   else if(r!==null&&r<GUIDE.retireTarget) s.push('Raise my retirement savings by 1% of my pay');
   var t=S.story.themes.filter(function(x){return x.trim();})[0];
@@ -850,7 +853,7 @@ function orderItems(){
   return [
     {t:'Starter emergency fund', d:'About '+GUIDE.efStarter+' month of expenses set aside.',
       s: m===null?'n':(m>=GUIDE.efStarter?'ok':'warn'), l: m===null?'Fill in steps 2 & 5':(m>=GUIDE.efStarter?'Done':'Start here')},
-    {t:'Get your full employer match', d:'If your employer matches 401(k) contributions, put in at least enough to get all of it.',
+    {t:'Get your full employer match', d:'If your employer matches 401(k) contributions, put in at least enough to get all of it.'+(mg.length?' This comes out of your paycheck, not the money below, so your take-home will drop a little. Update step 4 after you change it.':''),
       s: mg.length?'warn':(hasMatchInfo()?'ok':'n'), l: mg.length?'Missing some':(hasMatchInfo()?'Done':(hasWork?'Add match info':'If you have one'))},
     {t:'Pay off high-interest debt ('+GUIDE.highRate+'%+)', d:'Highest rate first. These usually cost more than you would give up by pausing extra investing.',
       s: hd.length?'warn':(debtsEntered()?'ok':'n'), l: hd.length?hd.length+' to go':(debtsEntered()?'None':'None entered')},
@@ -1005,6 +1008,7 @@ function renderSummary(){
   var story='<div class="sub">Themes of my story</div>'+li(st.themes)+'<div class="sub">Barriers</div>'+li(st.barriers)+
     (st.from||st.to?'<p>My story moves from <b>'+esc(st.from||'…')+'</b> to <b>'+esc(st.to||'…')+'</b></p>':'');
   var uses=p.uses.filter(function(u){return u.name.trim()||num(u.amt);});
+  if(uses.some(function(u){return num(u.amt)>0;})) uses=uses.filter(function(u){return num(u.amt)>0;}); // once they've assigned money, only show what got some
   var plan=(!num(p.takeHome)&&!expTotal()) ? '<p class="empty">Not filled in yet</p>' : '<div class="stat"><span>Take-home pay</span><b>'+fmt(num(p.takeHome))+'/mo</b></div>'+
     '<div class="stat"><span>Expenses</span><b>'+fmt(expTotal())+'/mo</b></div>'+
     (fromTakeHome()?'<div class="stat"><span>Saving &amp; investing already happening</span><b>'+fmt(fromTakeHome())+'/mo</b></div>':'')+
