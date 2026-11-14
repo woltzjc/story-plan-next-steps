@@ -173,6 +173,37 @@ details.lv[open] summary::after{content:'–'}
 .acct .calc{font-size:14px;color:var(--ink-muted);margin-top:8px}
 .acct .chk2{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px}
 .acct .chk2 input{width:18px;height:18px;accent-color:var(--forest)}
+/* phone layout */
+@media (max-width:620px){
+  .card .step,.forest .step{flex-direction:column;gap:10px}
+  .card .step>div:not(.badge),.forest .step>div:not(.badge){width:100%}
+  .badge[data-of]{display:inline-flex;align-items:center;gap:0;align-self:flex-start;width:auto;height:26px;padding:0 12px;border-radius:999px;font-size:12px;letter-spacing:.06em;white-space:pre}
+  .badge[data-of]::before{content:'STEP '}
+  .badge[data-of]::after{content:' OF ' attr(data-of)}
+  .prow{grid-template-columns:1fr 36px;max-width:none}
+  .prow .who{grid-column:1/-1}
+  .orderlist li{grid-template-columns:26px 1fr}
+  .orderlist li>.pill{grid-column:2;justify-self:start}
+  nav.tabs{flex-wrap:wrap;gap:0 2px}
+  nav.tabs button{min-height:42px;padding:0 9px;font-size:14px}
+}
+/* saved indicator */
+#saved{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--forest);color:var(--cream);font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .22s var(--ease);z-index:20}
+#saved.on{opacity:.92}
+@media (prefers-color-scheme:dark){#saved{background:var(--surface-soft);color:var(--ink)}}
+@media print{#saved{display:none}}
+/* sign-up page extras */
+.who-card{display:flex;gap:14px;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.who-card img{width:56px;height:56px;border-radius:999px;object-fit:cover;flex:0 0 auto}
+.who-card p{margin:0;font-size:14px;line-height:21px;color:var(--ink-muted)}
+.who-card b{color:var(--ink)}
+.preview{max-width:520px;margin-top:20px}
+.pv{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.pv>div{border:2px solid var(--forest);border-radius:10px;overflow:hidden;background:var(--surface)}
+.pv .t{background:var(--forest);color:var(--cream);font-size:11px;font-weight:700;letter-spacing:.14em;padding:6px 10px}
+.pv .b{padding:8px 10px;font-size:13px;line-height:18px;color:var(--ink-muted)}
+@media (prefers-color-scheme:dark){.pv>div{border-color:var(--line)}}
+@media (max-width:480px){.pv{grid-template-columns:1fr}}
 .focus{margin-top:12px;padding:12px 14px;border-left:3px solid var(--accent);background:var(--surface);font-size:15px}
 
 /* next steps */
@@ -239,6 +270,19 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <button class="btn primary" type="submit" id="gBtn">Start my plan</button>
         <p class="help mt">You'll also get my newsletter. Unsubscribe anytime. The numbers you enter stay on this device. They're never sent to me or anyone else.</p>
       </form>
+      <div class="who-card">
+        <img src="jeremy.jpg" alt="Jeremy Woltz" width="56" height="56">
+        <p><b>Built by Jeremy Woltz</b>, a pastor turned financial planner. This is the same framework I use with my clients.</p>
+      </div>
+    </div>
+    <div class="preview">
+      <div class="label">What you'll walk away with</div>
+      <div class="pv">
+        <div><div class="t">STORY</div><div class="b">3 themes for the life you want, and what's in the way</div></div>
+        <div><div class="t">PLAN</div><div class="b">Where your money goes, and how to use what's left</div></div>
+        <div><div class="t">NEXT STEPS</div><div class="b">1–3 clear steps you can take this month</div></div>
+      </div>
+      <p class="small muted" style="margin-top:8px">All on one page you can print or save.</p>
     </div>
   </section>
 
@@ -349,8 +393,8 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <div class="step"><div class="badge">3</div><div style="flex:1">
           <h3>Where is your story headed? <span class="muted small" style="font-weight:400">(optional)</span></h3>
           <div class="grid2">
-            <div><label class="f" for="sFrom">My story moves from…</label><input type="text" id="sFrom" data-p="story.from" placeholder="“Not gonna happen”"></div>
-            <div><label class="f" for="sTo">…to</label><input type="text" id="sTo" data-p="story.to" placeholder="“I'm gonna make it happen!”"></div>
+            <div><label class="f" for="sFrom">My story moves from…</label><input type="text" id="sFrom" data-p="story.from" placeholder="Where it feels stuck today"></div>
+            <div><label class="f" for="sTo">…to</label><input type="text" id="sTo" data-p="story.to" placeholder="Where you want it headed"></div>
           </div>
         </div></div>
       </div>
@@ -506,6 +550,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <button class="btn secondary" id="printBtn">Print or save as PDF</button>
         <button class="btn quiet" id="resetBtn">Start over</button>
       </div>
+      <p class="small muted noprint" style="margin-top:8px">Your plan is saved on this device only. Print it or save a PDF to keep a copy, or to open it somewhere else.</p>
       <div class="card mt noprint" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
         <div><div class="label">Bonus tool</div><h3 style="margin-top:4px">See how your retirement savings could grow</h3><p class="small muted" style="margin:0">You can pull in your numbers from the Plan tab with one click.</p></div>
         <button class="btn primary" data-go="retire">Open the retirement calculator →</button>
@@ -519,6 +564,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
     </section>
   </div>
 
+  <div id="saved" role="status" aria-live="polite">Saved ✓</div>
   <footer>
     <p>Pastor Turned Planner · Jeremy Woltz. This tool is for education only and isn't individual financial, tax, or legal advice.</p>
   </footer>
@@ -582,7 +628,11 @@ function load(){
   if(s.plan.accounts){ var ef=s.plan.accounts.filter(function(a){return /emergency/i.test(a.name);})[0]; if(ef&&s.plan.accts[0]&&s.plan.accts[0].type==='ef'&&!num(s.plan.accts[0].bal)){ s.plan.accts[0].bal=ef.bal; s.plan.accts[0].amt=ef.add; } delete s.plan.accounts; }
   return s;
 }
-var saveT; function save(){ clearTimeout(saveT); saveT=setTimeout(function(){ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){} },150); }
+var saveT, savedT, ready=false;
+function save(quiet){ clearTimeout(saveT); saveT=setTimeout(function(){
+  var ok=true; try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){ok=false;}
+  if(ok&&!quiet&&ready&&S.unlocked){ var el=document.getElementById('saved'); el.classList.add('on'); clearTimeout(savedT); savedT=setTimeout(function(){el.classList.remove('on');},1400); }
+},150); }
 function $(id){return document.getElementById(id);}
 function num(v){var n=parseFloat(String(v==null?'':v).replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n;}
 function fmt(n){return (n<0?'−':'')+'$'+Math.round(Math.abs(n)).toLocaleString('en-US');}
@@ -610,7 +660,7 @@ $('gateForm').addEventListener('submit',function(e){
 function go(t){
   document.querySelectorAll('nav.tabs button').forEach(function(b){b.setAttribute('aria-selected',b.dataset.tab===t);});
   document.querySelectorAll('section.panel').forEach(function(p){p.classList.toggle('on',p.id==='p-'+t);});
-  S.tab=t; save();
+  S.tab=t; save(true);
   if(t==='next') renderNext();
   if(t==='retire') calcRet();
   if(t==='summary') renderSummary();
@@ -727,6 +777,7 @@ $('accts').addEventListener('change',function(e){
   if(e.target.matches('select,input[type=checkbox]')) recalc(); });
 function marginChips(){
   var exp=expTotal();
+  if(exp<=0){ $('marginChips').innerHTML=''; return; }
   $('marginChips').innerHTML=[5,10].map(function(p){return '<button class="chip" data-m="'+Math.round(exp*p/100)+'">'+p+'% of expenses ('+fmt(exp*p/100)+')</button>';}).join('');
 }
 $('marginChips').addEventListener('click',function(e){var c=e.target.closest('[data-m]');if(!c)return;S.plan.margin=c.dataset.m;$('pMargin').value=c.dataset.m;save();recalc();});
@@ -791,6 +842,7 @@ function hasEF(){return S.plan.accts.some(function(a){return a.type==='ef';});}
 function efMonths(){var e=expTotal(); return (e>0&&hasEF())?efBal()/e:null;}
 function retRate(){var g=grossTotal(); return g>0?retireYearly()/g*100:null;}
 function highDebts(){return S.plan.debts.filter(function(d){return num(d.rate)>=GUIDE.highRate&&(num(d.bal)>0||d.name.trim());}).sort(function(a,b){return num(b.rate)-num(a.rate);});}
+function debtsEntered(){return S.plan.debts.some(function(d){return d.name.trim()||num(d.bal)||num(d.rate);});}
 function pill(cls,txt){return '<span class="pill '+cls+'">'+txt+'</span>';}
 function mo(m){return m.toFixed(1)+' month'+(m.toFixed(1)==='1.0'?'':'s');}
 function orderItems(){
@@ -801,11 +853,11 @@ function orderItems(){
     {t:'Get your full employer match', d:'If your employer matches 401(k) contributions, put in at least enough to get all of it.',
       s: mg.length?'warn':(hasMatchInfo()?'ok':'n'), l: mg.length?'Missing some':(hasMatchInfo()?'Done':(hasWork?'Add match info':'If you have one'))},
     {t:'Pay off high-interest debt ('+GUIDE.highRate+'%+)', d:'Highest rate first. These usually cost more than you would give up by pausing extra investing.',
-      s: hd.length?'warn':'ok', l: hd.length?hd.length+' to go':'None'},
+      s: hd.length?'warn':(debtsEntered()?'ok':'n'), l: hd.length?hd.length+' to go':(debtsEntered()?'None':'None entered')},
     {t:'Build your emergency fund to '+GUIDE.efMin+'–'+GUIDE.efMax+' months', d:'So one surprise doesn\'t turn into new debt.',
       s: m===null?'n':(m>=GUIDE.efMin?'ok':'warn'), l: m===null?'Fill in steps 2 & 5':(m>=GUIDE.efMin?'Done':mo(m)+' now')},
     {t:'Work toward '+GUIDE.retireTarget+'% of gross income for retirement', d:'Including any employer match.',
-      s: r===null?'n':(r>=GUIDE.retireTarget?'ok':'warn'), l: r===null?'Fill in steps 1 & 2':(r>0?r.toFixed(1)+'% now':'Not started yet')},
+      s: r===null?'n':(r>=GUIDE.retireTarget?'ok':(r>0?'warn':'n')), l: r===null?'Fill in steps 1 & 2':(r>0?r.toFixed(1)+'% now':'Not started yet')},
     {t:'Fund your story goals all along the way', d:'Memories, experiences, generosity. You don\'t have to wait until everything else is done. Give them a slice every month.',
       s:'ok', l:'Always'}
   ];
@@ -953,7 +1005,7 @@ function renderSummary(){
   var story='<div class="sub">Themes of my story</div>'+li(st.themes)+'<div class="sub">Barriers</div>'+li(st.barriers)+
     (st.from||st.to?'<p>My story moves from <b>'+esc(st.from||'…')+'</b> to <b>'+esc(st.to||'…')+'</b></p>':'');
   var uses=p.uses.filter(function(u){return u.name.trim()||num(u.amt);});
-  var plan='<div class="stat"><span>Take-home pay</span><b>'+fmt(num(p.takeHome))+'/mo</b></div>'+
+  var plan=(!num(p.takeHome)&&!expTotal()) ? '<p class="empty">Not filled in yet</p>' : '<div class="stat"><span>Take-home pay</span><b>'+fmt(num(p.takeHome))+'/mo</b></div>'+
     '<div class="stat"><span>Expenses</span><b>'+fmt(expTotal())+'/mo</b></div>'+
     (fromTakeHome()?'<div class="stat"><span>Saving &amp; investing already happening</span><b>'+fmt(fromTakeHome())+'/mo</b></div>':'')+
     '<div class="stat"><span>Margin for the unexpected</span><b>'+fmt(num(p.margin))+'/mo</b></div>'+
@@ -977,7 +1029,9 @@ $('resetBtn').addEventListener('click',function(){
 $('igLink').href=INSTAGRAM_URL;
 
 /* ---------- init ---------- */
-renderPeople(); renderAccts(); fill(); recalc(); go(S.tab||'story');
+document.querySelectorAll('#p-story .step>.badge').forEach(function(b){b.setAttribute('data-of','3');});
+document.querySelectorAll('#p-plan .step>.badge').forEach(function(b){b.setAttribute('data-of','8');});
+renderPeople(); renderAccts(); fill(); recalc(); go(S.tab||'story'); ready=true;
 })();
 </script>
 </body>
