@@ -152,6 +152,15 @@ details.card ul{margin:12px 0 4px;padding-left:20px}
 .orderlist li:first-child{border-top:0}
 .orderlist .on{width:26px;height:26px;border-radius:99px;background:var(--surface-soft);font-size:13px;font-weight:700;display:grid;place-items:center}
 .orderlist .d{font-size:13px;line-height:19px;color:var(--ink-muted)}
+details.lv{background:var(--surface-soft);border-radius:8px;padding:12px 14px;margin-top:12px}
+details.lv summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+details.lv summary::-webkit-details-marker{display:none}
+details.lv summary::after{content:'+';font-size:20px;color:var(--ink-muted)}
+details.lv[open] summary::after{content:'–'}
+.lvsteps{margin:12px 0 0;padding-left:22px;font-size:14px;line-height:21px}
+.lvsteps>li{margin-bottom:10px}
+.lvsteps ul{margin:4px 0 0;padding-left:18px;color:var(--ink-muted)}
+.lvsteps ul li{margin-bottom:2px}
 .prow{display:grid;grid-template-columns:110px 1fr 36px;gap:10px;align-items:center;margin-bottom:8px;max-width:460px}
 .prow .who{font-weight:600}
 .acct{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;background:var(--bg)}
@@ -159,6 +168,7 @@ details.card ul{margin:12px 0 4px;padding-left:20px}
 .acct .ah b{font-size:16px}
 .acct .ah select{width:auto;min-height:36px;padding:4px 10px;font-size:14px}
 .acct .af{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.acct .af.w{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
 .acct .af label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
 .acct .calc{font-size:14px;color:var(--ink-muted);margin-top:8px}
 .acct .chk2{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px}
@@ -287,7 +297,38 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
             <input type="text" data-p="story.themes.2" placeholder="Theme 3" aria-label="Theme 3">
           </div>
           <div class="chips" id="themeIdeas"></div>
-          <div class="tip"><b>Stuck?</b> Try these: When you're 80 and looking back, what would you regret not doing? When do you feel most like yourself? What do you want the people you love to remember about you?</div>
+          <details class="lv">
+            <summary>Need help? Walk through a Life Vision exercise (10–15 minutes)</summary>
+            <ol class="lvsteps">
+              <li><b>Set the scene</b>
+                <ul><li>Find a quiet spot and give yourself 10–15 minutes.</li>
+                <li>Married? Each do this on your own first, then compare. That conversation alone is worth it.</li></ul></li>
+              <li><b>Dream first, price tags later</b>
+                <ul><li>Ignore money for now. Write fast and don't edit yourself.</li>
+                <li>At 80, looking back, what made it a good life?</li>
+                <li>What would you regret not doing?</li>
+                <li>When do you feel most like yourself?</li>
+                <li>What do you want more of in your life? Less of?</li>
+                <li>If you had a free year, how would you spend it?</li>
+                <li>What do you want the people you love to remember about you?</li></ul></li>
+              <li><b>Look for patterns</b>
+                <ul><li>Read back what you wrote and circle the words and ideas that keep showing up.</li>
+                <li>Group the ones that belong together.</li></ul></li>
+              <li><b>Name your 3 themes</b>
+                <ul><li>Give each group a one- or two-word name, like <i>Memories</i>, <i>Generosity</i>, or <i>Freedom</i>.</li>
+                <li>Check each one: Would I make a money decision based on this? Will it still matter in 10 years? If not, keep looking.</li></ul></li>
+              <li><b>Picture each theme in real life</b>
+                <ul><li>For each theme, write one specific example of what it looks like, like “a birthday trip to Italy” or “giving monthly to a cause I love.”</li>
+                <li>These examples become the goals your plan pays for.</li></ul></li>
+              <li><b>Name what's in the way</b>
+                <ul><li>For each theme, ask: What's standing in the way?</li>
+                <li>Be honest. Barriers aren't only money. They can be time, debt, not being on the same page with your spouse, or simply not giving yourself permission.</li></ul></li>
+              <li><b>Write your “from → to” line</b>
+                <ul><li>Where does your story feel stuck today, and where do you want it headed?</li>
+                <li>Example: from “not gonna happen” to “I'm gonna make it happen!”</li></ul></li>
+            </ol>
+            <p class="small muted" style="margin:8px 0 0">Don't overthink it. This isn't set in stone. Come back and revise it as life changes.</p>
+          </details>
         </div></div>
       </div>
 
@@ -637,7 +678,13 @@ $('people').addEventListener('click',function(e){ if(e.target.id!=='rmSpouse') r
   S.plan.people.splice(1); S.plan.accts.forEach(function(a){a.owner=0;}); save(); renderPeople(); renderAccts(); recalc(); });
 
 /* ---------- step 2: accounts ---------- */
-function blankAcct(t){ return {type:t,owner:0,name:'',bal:'',amt:'',per:t==='hsa'?'yr':'mo',pct:'',match:'',need:'',payroll:t==='hsa'}; }
+function blankAcct(t){ return {type:t,owner:0,name:'',bal:'',amt:'',per:t==='hsa'?'yr':'mo',pct:'',cmode:'pct',match:'',emode:'pct',need:'',payroll:t==='hsa'}; }
+function modeSel(path,val){ return '<select data-p="'+path+'" data-remode aria-label="Percent or dollars" style="width:auto;min-width:0;padding:4px 8px;font-size:14px">'+
+  [['pct','% of pay'],['mo','$ / month'],['yr','$ / year']].map(function(o){return '<option value="'+o[0]+'"'+(o[0]===val?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'; }
+function amtModeF(p,field,modeField,mode,label){
+  var inp='<input type="text" inputmode="decimal" data-p="'+p+field+'" aria-label="'+label+'">';
+  return '<div><label>'+label+'</label><div style="display:flex;gap:6px;align-items:center"><div class="'+(mode==='pct'?'pct':'money')+'" style="flex:1">'+inp+'</div>'+modeSel(p+modeField,mode)+'</div></div>';
+}
 function moneyF(path,label){ return '<div><label>'+label+'</label><div class="money"><input type="text" inputmode="decimal" data-p="'+path+'"></div></div>'; }
 function pctF(path,label){ return '<div><label>'+label+'</label><div class="pct"><input type="text" inputmode="decimal" data-p="'+path+'"></div></div>'; }
 function renderAccts(){
@@ -649,8 +696,12 @@ function renderAccts(){
       '<button class="x" data-rmacct="'+i+'" aria-label="Remove '+T.label+'">×</button></span></div>';
     var body;
     if(a.type==='work'){
-      body='<div class="af">'+moneyF(p+'bal','Balance')+pctF(p+'pct','You contribute (% of pay)')+pctF(p+'match','Employer adds (% of pay)')+pctF(p+'need','You must put in this much for the full match')+'</div>'+
-        '<div class="help">Check your benefits info for the match. Leave the match boxes blank if there isn\'t one.</div><div class="calc" id="wc'+i+'"></div>';
+      var cm=a.cmode||'pct', em=a.emode||'pct';
+      body='<div class="af w">'+moneyF(p+'bal','Balance')+
+        amtModeF(p, cm==='pct'?'pct':'amt', 'cmode', cm, 'You contribute')+
+        amtModeF(p, em==='pct'?'match':'eamt', 'emode', em, 'Employer adds')+
+        (em==='pct'?pctF(p+'need','Needed for the full match (% of pay)'):'')+'</div>'+
+        '<div class="help">Enter a % of pay or a set dollar amount, whichever matches how you contribute. Solo 401(k)? Use dollars for both. Leave the employer boxes blank if there\'s no match.</div><div class="calc" id="wc'+i+'"></div>';
     } else {
       body='<div class="af">'+moneyF(p+'bal','Balance')+moneyF(p+'amt','You add')+
         '<div><label>How often</label><select data-p="'+p+'per"><option value="mo">Per month</option><option value="yr">Per year</option></select></div></div>'+
@@ -671,7 +722,9 @@ $('acctAdd').addEventListener('click',function(e){ var c=e.target.closest('[data
   var cards=document.querySelectorAll('#accts .acct'); var inp=cards[cards.length-1].querySelector('.af input'); if(inp) inp.focus(); });
 $('accts').addEventListener('click',function(e){ var b=e.target.closest('[data-rmacct]'); if(!b) return;
   S.plan.accts.splice(+b.dataset.rmacct,1); save(); renderAccts(); recalc(); });
-$('accts').addEventListener('change',function(e){ if(e.target.matches('select,input[type=checkbox]')) recalc(); });
+$('accts').addEventListener('change',function(e){
+  if(e.target.matches('[data-remode]')){ renderAccts(); recalc(); return; }
+  if(e.target.matches('select,input[type=checkbox]')) recalc(); });
 function marginChips(){
   var exp=expTotal();
   $('marginChips').innerHTML=[5,10].map(function(p){return '<button class="chip" data-m="'+Math.round(exp*p/100)+'">'+p+'% of expenses ('+fmt(exp*p/100)+')</button>';}).join('');
@@ -690,7 +743,7 @@ $('suggestUses').addEventListener('click',function(){
 function suggestions(){
   var s=[], m=efMonths(), r=retRate(), hd=highDebts();
   if(m!==null&&m<GUIDE.efStarter) s.push('Save '+fmt(expTotal()*GUIDE.efStarter)+' as a starter emergency fund');
-  matchGaps().forEach(function(a){ s.push('Raise '+(S.plan.people.length>1&&+a.owner===1?'my spouse\'s':'my')+' 401(k) from '+num(a.pct)+'% to '+num(a.need)+'% to get the full match'); });
+  matchGaps().forEach(function(a){ s.push('Raise '+(S.plan.people.length>1&&+a.owner===1?'my spouse\'s':'my')+' 401(k) from '+(Math.round(workPct(a)*10)/10)+'% to '+num(a.need)+'% of pay to get the full match'); });
   if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
   if(m!==null&&m>=GUIDE.efStarter&&m<GUIDE.efMin) s.push('Build my emergency fund to '+GUIDE.efMin+' months ('+fmt(expTotal()*GUIDE.efMin)+')');
   if(!hasRetireAcct()) s.push('Open a Roth IRA and set up an automatic monthly contribution');
@@ -713,10 +766,14 @@ function expTotal(){return sum(S.plan.expenses,'amt')+debtMin();}
 function grossTotal(){return S.plan.people.reduce(function(t,p){return t+num(p.gross);},0);}
 function ownerGross(a){var p=S.plan.people[+a.owner||0]||S.plan.people[0]; return num(p.gross);}
 function yearly(a){return num(a.amt)*(a.per==='yr'?1:12);}
-function workYou(a){return ownerGross(a)*num(a.pct)/100;}
-function workEmployer(a){ // if they put in less than the match requires, assume the match scales down with them
-  var m=num(a.match), need=num(a.need), pct=num(a.pct);
-  if(need>0&&pct<need) m=m*pct/need;
+function dollarsYr(v,mode){return num(v)*(mode==='yr'?1:12);}
+function workYou(a){ var cm=a.cmode||'pct'; return cm==='pct' ? ownerGross(a)*num(a.pct)/100 : dollarsYr(a.amt,cm); }
+function workPct(a){ // what they put in, as a % of that person's pay
+  var cm=a.cmode||'pct'; if(cm==='pct') return num(a.pct); var g=ownerGross(a); return g>0?workYou(a)/g*100:0; }
+function workEmployer(a){
+  var em=a.emode||'pct'; if(em!=='pct') return dollarsYr(a.eamt,em);
+  var m=num(a.match), need=num(a.need), pct=workPct(a);
+  if(need>0&&pct<need) m=m*pct/need; // if they put in less than the match requires, assume the match scales down with them
   return ownerGross(a)*m/100;
 }
 function retireYearly(){return S.plan.accts.reduce(function(t,a){ if(a.type==='work') return t+workYou(a)+workEmployer(a); return (ACCT[a.type]||{}).ret ? t+yearly(a) : t; },0);}
@@ -724,8 +781,9 @@ function hasRetireAcct(){return S.plan.accts.some(function(a){return (ACCT[a.typ
 function fromTakeHome(){ // monthly savings & investing that leaves the bank account
   return S.plan.accts.reduce(function(t,a){ var T=ACCT[a.type]||ACCT.other; if(a.type==='work') return t; if(a.type==='hsa'&&a.payroll) return t; return T.th? t+yearly(a)/12 : t; },0);
 }
-function matchGaps(){return S.plan.accts.filter(function(a){return a.type==='work'&&num(a.need)>0&&num(a.pct)<num(a.need);});}
-function hasMatchInfo(){return S.plan.accts.some(function(a){return a.type==='work'&&num(a.need)>0;});}
+function matchApplies(a){return a.type==='work'&&(a.emode||'pct')==='pct'&&num(a.need)>0;}
+function matchGaps(){return S.plan.accts.filter(function(a){return matchApplies(a)&&workPct(a)<num(a.need)-0.05;});}
+function hasMatchInfo(){return S.plan.accts.some(matchApplies);}
 function retireBal(){return S.plan.accts.reduce(function(t,a){return (ACCT[a.type]||{}).ret?t+num(a.bal):t;},0);}
 function leftover(){return num(S.plan.takeHome)-expTotal()-fromTakeHome()-num(S.plan.margin);}
 function efBal(){return S.plan.accts.filter(function(a){return a.type==='ef';}).reduce(function(t,a){return t+num(a.bal);},0);}
@@ -757,10 +815,12 @@ function recalc(){
   $('o-gross').innerHTML = S.plan.people.length>1&&g>0 ? 'Household gross income: <b>'+fmt(g)+'</b> a year.' : '';
   // per-card 401(k) math
   S.plan.accts.forEach(function(a,i){ if(a.type!=='work') return; var el=$('wc'+i); if(!el) return;
-    if(!ownerGross(a)){ el.textContent='Add '+(S.plan.people.length>1&&+a.owner===1?'your spouse\'s':'your')+' income in step 1 to see the dollar amounts.'; return; }
-    var gap=num(a.need)>0&&num(a.pct)<num(a.need);
-    el.innerHTML='That\'s about <b>'+fmt(workYou(a))+'</b>/yr from '+(+a.owner===1&&S.plan.people.length>1?'your spouse':'you')+(num(a.match)?' + <b>'+fmt(workEmployer(a))+'</b>/yr from the employer':'')+'.'+
-      (gap?' '+pill('warn','Missing part of the match'):(num(a.need)>0?' '+pill('ok','Getting the full match'):''));
+    var usesPct=(a.cmode||'pct')==='pct'||(a.emode||'pct')==='pct';
+    if(!ownerGross(a)&&usesPct&&(num(a.pct)||num(a.match))){ el.textContent='Add '+(S.plan.people.length>1&&+a.owner===1?'your spouse\'s':'your')+' income in step 1 to see the dollar amounts.'; return; }
+    var gap=matchGaps().indexOf(a)>=0, you=workYou(a), er=workEmployer(a);
+    if(!you&&!er){ el.innerHTML=''; return; }
+    el.innerHTML='That\'s about <b>'+fmt(you)+'</b>/yr from '+(+a.owner===1&&S.plan.people.length>1?'your spouse':'you')+(er?' + <b>'+fmt(er)+'</b>/yr from the employer':'')+'.'+
+      (gap?' '+pill('warn','Missing part of the match'):(matchApplies(a)?' '+pill('ok','Getting the full match'):''));
   });
   // retirement guideline
   if(!hasRetireAcct()) $('o-rate').innerHTML='<div class="tip">No retirement accounts yet? That\'s okay. That\'s exactly what your plan and next steps are for.</div>';
