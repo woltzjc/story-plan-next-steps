@@ -523,24 +523,26 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
           <div><label class="f" for="rRate">Return rate</label><div class="pct"><input type="text" inputmode="decimal" id="rRate" data-p="ret.rate"></div></div>
           <div><label class="f" for="rInc">Yearly contribution increase</label><div class="pct"><input type="text" inputmode="decimal" id="rInc" data-p="ret.inc"></div></div>
           <div><label class="f" for="rWd">Withdrawal rate in retirement</label><div class="pct"><input type="text" inputmode="decimal" id="rWd" data-p="ret.wd"></div></div>
+          <div><label class="f" for="rInf">Inflation</label><div class="pct"><input type="text" inputmode="decimal" id="rInf" data-p="ret.infl"></div></div>
         </div>
-        <div class="help">The return rate is a hypothetical assumption, not a promised return. Try a few different numbers to see a range.</div>
+        <div class="help">The return rate is a hypothetical assumption, not a promised return. Try a few different numbers to see a range. Inflation is how fast prices rise each year; it's used to show what your future money would buy in today's dollars.</div>
         <button class="btn quiet mt" id="pullPlan">Use my numbers from the Plan tab</button>
       </div>
       <div class="forest">
         <div class="label" id="r-pre">In 0 years, you could have</div>
         <div class="big" id="r-final" style="color:var(--gold)">$0</div>
+        <div id="r-real" style="color:var(--sage);font-size:16px;margin-top:2px"></div>
         <div class="grid3 mt">
           <div><div class="small" style="color:var(--sage)">What you put in</div><b id="r-in">$0</b></div>
           <div><div class="small" style="color:var(--sage)">Growth</div><b id="r-grow">$0</b></div>
-          <div><div class="small" style="color:var(--sage)">Est. monthly income in retirement</div><b id="r-inc">$0</b></div>
+          <div><div class="small" style="color:var(--sage)">Est. monthly income in retirement</div><b id="r-inc">$0</b><div class="small" id="r-inc-real" style="color:var(--sage)"></div></div>
         </div>
       </div>
       <div class="card">
         <canvas id="chart" aria-label="Projected balance by age" role="img"></canvas>
         <div class="legend"><span><i id="lg1"></i>What you put in</span><span><i id="lg2"></i>Growth</span></div>
       </div>
-      <p class="small muted">For education and illustration only. All figures are hypothetical, based only on what you enter, and don't reflect any specific investment. Actual results will vary. This doesn't account for inflation, taxes, fees, or Social Security.</p>
+      <p class="small muted">For education and illustration only. All figures are hypothetical, based only on what you enter, and don't reflect any specific investment. Actual results will vary. Today's-dollar amounts assume steady inflation at the rate you enter. This doesn't account for taxes, fees, or Social Security.</p>
       <div class="navrow"><button class="btn secondary" data-go="summary">← My Framework</button></div>
     </section>
 
@@ -598,7 +600,7 @@ var DEFAULT = {
     margin:'', uses:[]},
   next:[{text:'',theme:'',done:false},{text:'',theme:'',done:false},{text:'',theme:'',done:false}],
   done:[],
-  ret:{age:'38', retireAge:'65', savings:'50000', monthly:'750', rate:'6', inc:'0', wd:'4'},
+  ret:{age:'38', retireAge:'65', savings:'50000', monthly:'750', rate:'6', inc:'0', wd:'4', infl:'2.5'},
   tab:'story'
 };
 var LISTS = {
@@ -990,6 +992,9 @@ function calcRet(){
   $('r-pre').textContent='In '+r.years+' year'+(r.years===1?'':'s')+', you could have';
   $('r-final').textContent=fmt(r.final); $('r-in').textContent=fmt(r.total);
   $('r-grow').textContent=fmt(Math.max(0,r.final-r.total)); $('r-inc').textContent=fmt(r.final*num(S.ret.wd)/100/12);
+  var defl=Math.pow(1+num(S.ret.infl)/100, r.years), show=num(S.ret.infl)>0;
+  $('r-real').innerHTML = show ? '≈ <b style="color:var(--cream)">'+fmt(r.final/defl)+'</b> in today\'s dollars, with '+num(S.ret.infl)+'% inflation' : '';
+  $('r-inc-real').textContent = show ? '≈ '+fmt(r.final*num(S.ret.wd)/100/12/defl)+'/mo in today\'s dollars' : '';
   draw(r.points);
 }
 function draw(pts){
