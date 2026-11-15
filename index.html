@@ -671,9 +671,18 @@ function go(t){
   if(t==='retire') calcRet();
   if(t==='summary') renderSummary();
 }
-document.querySelectorAll('nav.tabs button').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.tab);});});
+function toSectionTop(t){ // bring the top of the new section into view, just under the sticky tabs
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ // wait for the page to settle after switching sections
+    var panel=$('p-'+t), nav=document.querySelector('nav.tabs');
+    var top=Math.max(0, panel.getBoundingClientRect().top+window.pageYOffset-nav.offsetHeight-8);
+    if(window.pageYOffset<=top) return; // already at or above it
+    var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({top:top,behavior:reduce?'auto':'smooth'});
+  }); });
+}
+document.querySelectorAll('nav.tabs button').forEach(function(b){b.addEventListener('click',function(){go(b.dataset.tab); toSectionTop(b.dataset.tab);});});
 document.addEventListener('click',function(e){
-  var g=e.target.closest('[data-go]'); if(g){ go(g.dataset.go); window.scrollTo({top:document.querySelector('nav.tabs').offsetTop-4}); }
+  var g=e.target.closest('[data-go]'); if(g){ go(g.dataset.go); toSectionTop(g.dataset.go); }
 });
 
 /* ---------- generic inputs ---------- */
