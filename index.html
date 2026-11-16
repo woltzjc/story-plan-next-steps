@@ -437,7 +437,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
 
       <div class="card"><div class="step"><div class="badge">3</div><div style="flex:1">
         <h3>Debts and interest rates</h3>
-        <p class="muted small">Credit cards, car loans, student loans, and so on. The rate is the APR on your statement. You can leave your mortgage off if you'd rather; it's already in your housing expense.</p>
+        <p class="muted small">Start with your mortgage: balance, interest rate, and monthly payment. Then add credit cards, car loans, student loans, and so on. The rate is the APR on your statement. Renting? Remove the mortgage line.</p>
         <div class="rows" data-list="plan.debts"></div>
         <button class="btn quiet" data-add="plan.debts">+ Add a debt</button>
         <div class="small mt" id="o-debts"></div>
@@ -452,7 +452,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
 
       <div class="card"><div class="step"><div class="badge">5</div><div style="flex:1">
         <h3>Monthly expenses</h3>
-        <p class="muted small">Look at the last few months of bank and card statements. Most people guess low.</p>
+        <p class="muted small">Look at the last few months of bank and card statements. Most people guess low. Your mortgage and other debt payments are already counted from step 3, so don't list them again here.</p>
         <div class="rows" data-list="plan.expenses"></div>
         <button class="btn quiet" data-add="plan.expenses">+ Add an expense</button>
         <div class="mt" id="o-exp"></div>
@@ -598,9 +598,9 @@ var DEFAULT = {
   story:{themes:['','',''], barriers:['','',''], from:'', to:''},
   plan:{people:[{name:'',gross:''}],
     accts:[{type:'ef',owner:0,name:'',bal:'',amt:'',per:'mo',pct:'',match:'',need:'',payroll:true}],
-    debts:[{name:'',bal:'',rate:'',min:''}],
+    debts:[{name:'Mortgage',bal:'',rate:'',min:''},{name:'',bal:'',rate:'',min:''}],
     takeHome:'',
-    expenses:[{name:'Housing',amt:''},{name:'Utilities',amt:''},{name:'Groceries',amt:''},{name:'Transportation',amt:''},{name:'Insurance',amt:''},{name:'Kids / childcare',amt:''},{name:'Subscriptions',amt:''},{name:'Everything else',amt:''}],
+    expenses:[{name:'Rent or other housing costs',amt:''},{name:'Utilities',amt:''},{name:'Groceries',amt:''},{name:'Transportation',amt:''},{name:'Insurance',amt:''},{name:'Kids / childcare',amt:''},{name:'Subscriptions',amt:''},{name:'Everything else',amt:''}],
     margin:'', uses:[]},
   next:[{text:'',theme:'',done:false},{text:'',theme:'',done:false},{text:'',theme:'',done:false}],
   done:[],
@@ -608,7 +608,7 @@ var DEFAULT = {
   tab:'story'
 };
 var LISTS = {
-  'plan.debts':{cls:'cols-debt', blank:{name:'',bal:'',rate:'',min:''}, cols:[['name','Debt','text'],['bal','Balance','money'],['rate','Rate','pct'],['min','Min. payment / mo','money']]},
+  'plan.debts':{cls:'cols-debt', blank:{name:'',bal:'',rate:'',min:''}, cols:[['name','Debt','text'],['bal','Balance','money'],['rate','Rate','pct'],['min','Monthly payment','money']]},
   'plan.expenses':{cls:'cols-exp', blank:{name:'',amt:''}, cols:[['name','Expense','text'],['amt','Per month','money']]},
   'plan.uses':{cls:'cols-use', blank:{name:'',amt:''}, cols:[['name','Use','text'],['amt','Per month','money']]}
 };
@@ -879,8 +879,9 @@ function efBal(){return S.plan.accts.filter(function(a){return a.type==='ef';}).
 function hasEF(){return S.plan.accts.some(function(a){return a.type==='ef';});}
 function efMonths(){var e=expTotal(); return (e>0&&hasEF())?efBal()/e:null;}
 function retRate(){var g=grossTotal(); return g>0?retireYearly()/g*100:null;}
-function highDebts(){return S.plan.debts.filter(function(d){return num(d.rate)>=GUIDE.highRate&&(num(d.bal)>0||d.name.trim());}).sort(function(a,b){return num(b.rate)-num(a.rate);});}
-function debtsEntered(){return S.plan.debts.some(function(d){return d.name.trim()||num(d.bal)||num(d.rate);});}
+function isMortgage(d){return /mortgage|home loan|heloc/i.test(d.name||'');}
+function highDebts(){return S.plan.debts.filter(function(d){return !isMortgage(d)&&num(d.rate)>=GUIDE.highRate&&(num(d.bal)>0||d.name.trim());}).sort(function(a,b){return num(b.rate)-num(a.rate);});}
+function debtsEntered(){return S.plan.debts.some(function(d){return num(d.bal)||num(d.rate)||(d.name.trim()&&!isMortgage(d));});}
 function pill(cls,txt){return '<span class="pill '+cls+'">'+txt+'</span>';}
 function mo(m){return m.toFixed(1)+' month'+(m.toFixed(1)==='1.0'?'':'s');}
 function orderItems(){
@@ -928,16 +929,16 @@ function recalc(){
   // HSA, shown on its own
   var hs=S.plan.accts.filter(function(a){return a.type==='hsa';});
   $('o-hsa').innerHTML = hs.length&&(sum(hs,'bal')||hs.some(function(a){return num(a.amt);})) ? '<p class="note">HSA: <b>'+fmt(sum(hs,'bal'))+'</b> saved, <b>'+fmt(hs.reduce(function(t,a){return t+yearly(a);},0))+'</b> added per year. Tracked separately from retirement.</p>' : '';
-  var ds=S.plan.debts.filter(function(d){return d.name.trim()||num(d.bal);});
+  var ds=S.plan.debts.filter(function(d){return num(d.bal)||num(d.rate)||(d.name.trim()&&!isMortgage(d));});
   if(ds.length){
     var sorted=ds.slice().sort(function(x,y){return num(y.rate)-num(x.rate);});
     var nh=highDebts().length;
-    $('o-debts').innerHTML='Total owed: <b>'+fmt(sum(ds,'bal'))+'</b>. Highest rate first:<ol class="order">'+sorted.map(function(d){return '<li>'+esc(d.name||'Debt')+' — '+num(d.rate)+'% ('+fmt(num(d.bal))+')'+(num(d.rate)>=GUIDE.highRate?'<span class="tag">High interest</span>':'')+'</li>';}).join('')+'</ol>'+
-      '<div class="tip"><b>Rule of thumb:</b> debts at '+GUIDE.highRate+'% or higher are generally worth paying down before investing beyond an employer match, highest rate first.'+(nh?' You have '+nh+'.':'')+'</div>';
+    $('o-debts').innerHTML='Total owed: <b>'+fmt(sum(ds,'bal'))+'</b>. Highest rate first:<ol class="order">'+sorted.map(function(d){return '<li>'+esc(d.name||'Debt')+' — '+num(d.rate)+'% ('+fmt(num(d.bal))+')'+(num(d.rate)>=GUIDE.highRate&&!isMortgage(d)?'<span class="tag">High interest</span>':'')+'</li>';}).join('')+'</ol>'+
+      '<div class="tip"><b>Rule of thumb:</b> debts at '+GUIDE.highRate+'% or higher (other than your mortgage) are generally worth paying down before investing beyond an employer match, highest rate first.'+(nh?' You have '+nh+'.':'')+'</div>';
   } else $('o-debts').innerHTML='';
   var dm=debtMin(), et=expTotal(), th=num(S.plan.takeHome);
   $('o-exp').innerHTML='<div class="stat"><span>Expenses above</span><b>'+fmt(sum(S.plan.expenses,'amt'))+'</b></div>'+
-    '<div class="stat"><span>Debt minimum payments (from step 3)</span><b>'+fmt(dm)+'</b></div>'+
+    '<div class="stat"><span>Debt payments, including mortgage (from step 3)</span><b>'+fmt(dm)+'</b></div>'+
     '<div class="stat"><span>Total monthly expenses</span><b>'+fmt(et)+'</b></div>'+
     '<div class="stat"><span>Saving &amp; investing from take-home (from step 2)</span><b>'+fmt(fromTakeHome())+'</b></div>'+
     '<div class="stat"><span>Take-home minus expenses and savings</span><b>'+fmt(th-et-fromTakeHome())+'</b></div>'+
