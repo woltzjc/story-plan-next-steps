@@ -417,7 +417,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
 
       <div class="card"><div class="step"><div class="badge">1</div><div style="flex:1">
         <h3>Gross income</h3>
-        <p class="muted small">Yearly income before taxes. Add a line for each person or source, like a spouse, side business, or rental property.</p>
+        <p class="muted small">Yearly income before taxes: your salary, or “gross pay” on your pay stub. Add a line for each person or source, like a spouse, side business, or rental property.</p>
         <div class="prow hdr" aria-hidden="true"><span>Name or source</span><span>Per year</span><span></span></div>
         <div id="people"></div>
         <button class="btn quiet" id="addSpouse">+ Add income</button>
@@ -437,6 +437,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
 
       <div class="card"><div class="step"><div class="badge">3</div><div style="flex:1">
         <h3>Debts and interest rates</h3>
+        <p class="muted small">Credit cards, car loans, student loans, and so on. The rate is the APR on your statement. You can leave your mortgage off if you'd rather; it's already in your housing expense.</p>
         <div class="rows" data-list="plan.debts"></div>
         <button class="btn quiet" data-add="plan.debts">+ Add a debt</button>
         <div class="small mt" id="o-debts"></div>
@@ -446,7 +447,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <h3>Take-home pay</h3>
         <label class="f" for="pTake">What actually lands in your bank account each month</label>
         <div class="money" style="max-width:320px"><input type="text" inputmode="decimal" id="pTake" data-p="plan.takeHome"></div>
-        <div class="help">After taxes and paycheck deductions. Include any other money that lands in your account each month, like rental or side-business income after its expenses.</div>
+        <div class="help">After taxes and paycheck deductions. Not sure? Look at a recent paycheck deposit in your bank account. Include any other money that lands in your account each month, like rental or side-business income after its expenses.</div>
       </div></div></div>
 
       <div class="card"><div class="step"><div class="badge">5</div><div style="flex:1">
@@ -474,6 +475,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <h3>Use your story to decide how to <em class="s">use</em> it</h3>
         <p class="muted small">Not spend. <b>Use.</b> Give every dollar a job that points back to your three themes.</p>
         <div class="tip" id="o-order"></div>
+        <div class="tip"><b>Not sure how to split it?</b> Put most of it toward your top priority above, and give each story theme a small slice, even $25 a month. You can adjust anytime.</div>
         <div class="rows mt" data-list="plan.uses"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn quiet" data-add="plan.uses">+ Add a use</button>
@@ -521,14 +523,15 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
           <div><label class="f" for="rSav">Current retirement savings</label><div class="money"><input type="text" inputmode="decimal" id="rSav" data-p="ret.savings"></div></div>
           <div><label class="f" for="rMon">Monthly contributions</label><div class="money"><input type="text" inputmode="decimal" id="rMon" data-p="ret.monthly"></div></div>
           <div><label class="f" for="rRate">Return rate</label><div class="pct"><input type="text" inputmode="decimal" id="rRate" data-p="ret.rate"></div></div>
-          <div><label class="f" for="rInc">Yearly contribution increase</label><div class="pct"><input type="text" inputmode="decimal" id="rInc" data-p="ret.inc"></div></div>
-          <div><label class="f" for="rWd">Withdrawal rate in retirement</label><div class="pct"><input type="text" inputmode="decimal" id="rWd" data-p="ret.wd"></div></div>
+          <div><label class="f" for="rInc">Yearly contribution increase</label><div class="pct"><input type="text" inputmode="decimal" id="rInc" data-p="ret.inc"></div><div class="help">How much you raise your contribution each year, like after a raise. Use 0 if you're not sure.</div></div>
+          <div><label class="f" for="rWd">Withdrawal rate in retirement</label><div class="pct"><input type="text" inputmode="decimal" id="rWd" data-p="ret.wd"></div><div class="help">The share of your savings you'd take out each year to live on.</div></div>
           <div><label class="f" for="rInf">Inflation</label><div class="pct"><input type="text" inputmode="decimal" id="rInf" data-p="ret.infl"></div></div>
         </div>
         <div class="help">The return rate is a hypothetical assumption, not a promised return. Try a few different numbers to see a range. Inflation is how fast prices rise each year; it's used to show what your future money would buy in today's dollars.</div>
         <button class="btn quiet mt" id="pullPlan">Use my numbers from the Plan tab</button>
       </div>
       <div class="forest">
+        <div id="r-example" class="small" style="background:rgba(232,201,138,.16);color:var(--cream);border-radius:8px;padding:8px 12px;margin-bottom:12px">These are example numbers. Change them to yours above, or tap “Use my numbers from the Plan tab.”</div>
         <div class="label" id="r-pre">In 0 years, you could have</div>
         <div class="big" id="r-final" style="color:var(--gold)">$0</div>
         <div id="r-real" style="color:var(--sage);font-size:16px;margin-top:2px"></div>
@@ -559,6 +562,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <button class="btn quiet" id="resetBtn">Start over</button>
       </div>
       <p class="small muted noprint" style="margin-top:8px">Your plan is saved on this device only. Print it or save a PDF to keep a copy, or to open it somewhere else.</p>
+      <div class="tip noprint"><b>What now?</b> Take your first next step this week. Then set a reminder for 30 days from now: come back, check off what's done, and pick your next step.</div>
       <div class="card mt noprint" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
         <div><div class="label">Bonus tool</div><h3 style="margin-top:4px">See how your retirement savings could grow</h3><p class="small muted" style="margin:0">You can pull in your numbers from the Plan tab with one click.</p></div>
         <button class="btn primary" data-go="retire">Open the retirement calculator →</button>
@@ -621,6 +625,16 @@ var ACCT = {
   savings:  {label:'Other savings',   ret:false, th:true, named:true},
   other:    {label:'Other',           ret:false, th:true, named:true}
 };
+var ABOUT = {
+  work:'A retirement account through your job. Money comes out of your paycheck before taxes, and many employers add a match.',
+  roth:'A retirement account you open and fund yourself. Money goes in after taxes and can come out tax-free in retirement.',
+  trad:'A retirement account you open yourself. Contributions may lower your taxes now; you pay taxes when you take money out in retirement.',
+  brokerage:'Regular investments outside of retirement accounts. You can use them anytime. They don\'t count toward the retirement guideline.',
+  hsa:'A health savings account that goes with a high-deductible health plan. It\'s for medical costs and is shown separately from retirement.',
+  ef:'Cash set aside for surprises, like a job loss or a car repair. Usually kept in a savings account.',
+  savings:'Savings for a specific goal, separate from your emergency fund, like a car or vacation fund. If this is your emergency fund, use the Emergency fund card instead.',
+  other:'Anything else you\'re saving or investing in.'
+};
 var ACCT_ORDER=['work','roth','trad','brokerage','hsa','ef','savings','other'];
 var STEP_IDEAS = ['Start a budget','Trim expenses or raise income','Pay off debt, highest interest rate first','Build a 3–6 month emergency fund','Open a brokerage account','Invest a set amount from every paycheck'];
 
@@ -631,6 +645,7 @@ function load(){
   var d=clone(DEFAULT); if(!s) return d;
   for(var k in d){ if(s[k]===undefined) s[k]=d[k]; }
   ['story','plan','ret'].forEach(function(k){ for(var j in d[k]) if(s[k][j]===undefined) s[k][j]=d[k][j]; });
+  if(s.ret.touched===undefined){ var dr=d.ret; s.ret.touched=Object.keys(dr).some(function(k){return s.ret[k]!==undefined&&String(s.ret[k])!==String(dr[k]);}); }
   // carry over answers saved by the earlier version of the tool
   if(s.plan.gross!==undefined){ if(!num(s.plan.people[0].gross)) s.plan.people[0].gross=s.plan.gross; delete s.plan.gross; delete s.plan.retire; delete s.plan.saveXfer; }
   if(s.plan.accounts){ var ef=s.plan.accounts.filter(function(a){return /emergency/i.test(a.name);})[0]; if(ef&&s.plan.accts[0]&&s.plan.accts[0].type==='ef'&&!num(s.plan.accts[0].bal)){ s.plan.accts[0].bal=ef.bal; s.plan.accts[0].amt=ef.add; } delete s.plan.accounts; }
@@ -692,7 +707,7 @@ function fill(root){ (root||document).querySelectorAll('[data-p]').forEach(funct
 document.addEventListener('input',function(e){
   var el=e.target; if(!el.dataset||!el.dataset.p) return;
   setP(el.dataset.p, el.type==='checkbox'?el.checked:el.value); save(); recalc();
-  if(el.dataset.p.indexOf('ret.')===0) calcRet();
+  if(el.dataset.p.indexOf('ret.')===0){ S.ret.touched=true; calcRet(); }
   if(el.dataset.p.indexOf('story.themes')===0) themeSelects();
 });
 
@@ -781,11 +796,9 @@ function renderAccts(){
       body='<div class="af">'+moneyF(p+'bal','Balance')+moneyF(p+'amt','You add')+
         '<div><label>How often</label><select data-p="'+p+'per"><option value="mo">Per month</option><option value="yr">Per year</option></select></div></div>'+
         (a.type==='hsa'?'<label class="chk2"><input type="checkbox" data-p="'+p+'payroll"> Comes out of my paycheck</label>':'')+
-        (a.type==='savings'?'<div class="help">Separate from your emergency fund, like a car or vacation fund. If this is your emergency fund, use the Emergency fund card instead.</div>':'')+
-        (a.type==='brokerage'?'<div class="help">Investments outside of retirement accounts. These don\'t count toward the retirement guideline.</div>':'')+
-        (a.type==='hsa'?'<div class="help">Health savings account. Shown separately from retirement.</div>':'');
+'';
     }
-    return '<div class="acct">'+head+body+'</div>';
+    return '<div class="acct">'+head+'<p class="help" style="margin:-4px 0 10px">'+ABOUT[a.type]+'</p>'+body+'</div>';
   }).join('');
   var have=S.plan.accts.map(function(a){return a.type;});
   $('acctAdd').innerHTML=ACCT_ORDER.filter(function(t){ return !(t==='ef'&&have.indexOf('ef')>=0); })
@@ -822,7 +835,7 @@ function suggestions(){
   matchGaps().forEach(function(a){ s.push('Raise '+((+a.owner||0)>0?who(+a.owner)+'\'s':'my')+' 401(k) from '+(Math.round(workPct(a)*10)/10)+'% to '+num(a.need)+'% of pay to get the full match'); });
   if(hd.length) s.push('Pay extra on '+(hd[0].name||'my highest-rate debt')+' ('+num(hd[0].rate)+'%) until it\'s gone');
   if(m!==null&&m>=GUIDE.efStarter&&m<GUIDE.efMin) s.push(efGoal(GUIDE.efMin));
-  if(!hasRetireAcct()) s.push('Open a Roth IRA and set up an automatic monthly contribution');
+  if(!hasRetireAcct()&&m!==null&&m>=GUIDE.efStarter&&!hd.length) s.push('Open a Roth IRA and set up an automatic monthly contribution');
   else if(r!==null&&r<GUIDE.retireTarget) s.push('Raise my retirement savings by 1% of my pay');
   var t=S.story.themes.filter(function(x){return x.trim();})[0];
   if(t) s.push('Open a separate savings account for '+t.toLowerCase()+' and automate it each payday');
@@ -951,7 +964,8 @@ function themeOpts(sel){
 function themeSelects(){ document.querySelectorAll('select[data-ns]').forEach(function(s){ s.innerHTML=themeOpts(S.next[+s.dataset.ns].theme); }); }
 function renderNext(){
   var sg=suggestions(), chips=function(a){return '<div class="chips">'+a.map(function(t){return '<button class="chip" data-idea="'+esc(t)+'">'+esc(t)+'</button>';}).join('')+'</div>';};
-  $('stepIdeas').innerHTML=(sg.length?'<div class="label" style="margin-top:14px">Suggested from your plan</div>'+chips(sg)+'<div class="label" style="margin-top:14px">More ideas</div>':'')+chips(STEP_IDEAS);
+  var sparse=!grossTotal()&&!expTotal()&&!num(S.plan.takeHome);
+  $('stepIdeas').innerHTML=(sparse?'<div class="tip" style="margin-top:12px">Fill in the Plan tab first (especially steps 2 and 5) and you\'ll see ideas made for your numbers here.</div>':'')+(sg.length?'<div class="label" style="margin-top:14px">Suggested from your plan</div>'+chips(sg)+'<div class="label" style="margin-top:14px">More ideas</div>':'')+chips(STEP_IDEAS);
   $('nsList').innerHTML=S.next.map(function(n,i){
     return '<div class="card"><div class="ns"><div class="badge">'+(i+1)+'</div><div>'+
       '<label class="f" for="ns'+i+'">Next step '+(i+1)+(i>0?' <span class="muted" style="font-weight:400">(optional)</span>':'')+'</label>'+
@@ -990,6 +1004,7 @@ function cssv(n){return getComputedStyle(document.documentElement).getPropertyVa
 function calcRet(){
   var r=project();
   $('r-pre').textContent='In '+r.years+' year'+(r.years===1?'':'s')+', you could have';
+  $('r-example').hidden=!!S.ret.touched;
   $('r-final').textContent=fmt(r.final); $('r-in').textContent=fmt(r.total);
   $('r-grow').textContent=fmt(Math.max(0,r.final-r.total)); $('r-inc').textContent=fmt(r.final*num(S.ret.wd)/100/12);
   var defl=Math.pow(1+num(S.ret.infl)/100, r.years), show=num(S.ret.infl)>0;
@@ -1019,7 +1034,7 @@ function draw(pts){
   [[0,'left'],[Math.floor((n-1)/2),'center'],[n-1,'right']].forEach(function(a){ctx.textAlign=a[1];ctx.fillText('Age '+pts[a[0]].age,x(a[0]),pt+h+16);}); ctx.textAlign='left';
 }
 $('pullPlan').addEventListener('click',function(){
-  var bal=retireBal(), yr=retireYearly();
+  var bal=retireBal(), yr=retireYearly(); S.ret.touched=true;
   if(bal) S.ret.savings=String(Math.round(bal));
   if(yr) S.ret.monthly=String(Math.round(yr/12));
   fill($('p-retire')); save(); calcRet();
