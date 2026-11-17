@@ -209,6 +209,14 @@ details.lv[open] summary::after{content:'–'}
 .pv .b{padding:8px 10px;font-size:13px;line-height:18px;color:var(--ink-muted)}
 @media (prefers-color-scheme:dark){.pv>div{border-color:var(--line)}}
 @media (max-width:480px){.pv{grid-template-columns:1fr}}
+.welcome{display:flex;gap:14px;align-items:flex-start}
+.welcome img,.dmcard img{border-radius:999px;object-fit:cover;flex:0 0 auto}
+.welcome img{width:52px;height:52px}
+.welcome p{margin:0;font-size:16px;line-height:25px}
+.welcome .sig{margin-top:6px;font-family:var(--serif);font-style:italic;font-size:18px;color:var(--accent-ink)}
+.dmcard{display:flex;gap:18px;align-items:flex-start}
+.dmcard img{width:64px;height:64px;border:2px solid var(--gold)}
+@media (max-width:480px){.dmcard{flex-direction:column;gap:12px}}
 .focus{margin-top:12px;padding:12px 14px;border-left:3px solid var(--accent);background:var(--surface);font-size:15px}
 
 /* next steps */
@@ -313,6 +321,12 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
       <h2>Everything starts with your <em class="s">story.</em></h2>
       <p class="lead">What is the story you want your life to tell? This should guide every money decision you make from here.</p>
       <div class="rule"></div>
+
+      <div class="welcome card">
+        <img src="jeremy.jpg" alt="Jeremy Woltz" width="52" height="52">
+        <div><p id="welcomeText">Hey there, I'm glad you're here. Everything starts with your story, so let's write it together. The plan comes next, and it's okay if you use rough numbers for now.</p>
+        <p class="sig">– Jeremy</p></div>
+      </div>
 
       <details class="card" open>
         <summary>Before you start: what you'll need</summary>
@@ -567,11 +581,14 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;font-size:13px;line-
         <div><div class="label">Bonus tool</div><h3 style="margin-top:4px">See how your retirement savings could grow</h3><p class="small muted" style="margin:0">You can pull in your numbers from the Plan tab with one click.</p></div>
         <button class="btn primary" data-go="retire">Open the retirement calculator →</button>
       </div>
-      <div class="forest mt noprint">
+      <div class="forest mt noprint dmcard">
+        <img src="jeremy.jpg" alt="Jeremy Woltz" width="64" height="64">
+        <div>
         <div class="label">Want help with yours?</div>
         <h2 style="color:var(--cream)">Let's build it <em class="s">together.</em></h2>
         <p style="color:var(--sage)">DM me the word <b style="color:var(--cream)">PLAN</b> on Instagram and we'll set up a free 30-minute call.</p>
         <a class="btn gold" id="igLink" href="#" target="_blank" rel="noopener">DM “PLAN” on Instagram</a>
+        </div>
       </div>
     </section>
   </div>
@@ -665,7 +682,8 @@ function setP(p,v){var ks=p.split('.'),o=S;for(var i=0;i<ks.length-1;i++)o=o[ks[
 function sum(a,k){return a.reduce(function(t,r){return t+num(r[k]);},0);}
 
 /* ---------- gate ---------- */
-function unlock(){ document.body.classList.remove('locked'); if(S.name) $('hello').textContent=S.name+'’s plan'; }
+function unlock(){ document.body.classList.remove('locked'); if(S.name) $('hello').textContent=S.name+'’s plan';
+  $('welcomeText').textContent='Hey '+((S.name||'').trim()||'there')+', I\'m glad you\'re here. Everything starts with your story, so let\'s write it together. The plan comes next, and it\'s okay if you use rough numbers for now.'; }
 if(S.unlocked) unlock();
 $('gateForm').addEventListener('submit',function(e){
   e.preventDefault();
